@@ -30,9 +30,9 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public String login(LoginRequest loginRequest, HttpServletRequest request, Model model) {
+    public String login(LoginRequest loginRequest, HttpServletRequest httpServletRequest, Model model) {
         if (memberService.matches(loginRequest.getMemberId(), loginRequest.getMemberPwd())) {
-            HttpSession httpSession = request.getSession(true);
+            HttpSession httpSession = httpServletRequest.getSession(true);
 
             httpSession.setAttribute("id", loginRequest.getMemberId());
 
