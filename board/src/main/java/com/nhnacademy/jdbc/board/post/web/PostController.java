@@ -33,7 +33,6 @@ public class PostController {
         this.memberService = memberService;
     }
 
-
     @GetMapping("/board")
     public String postList(Model model) {
         List<Post> posts = postService.getPosts(NOT_DELETE_STATE);
@@ -79,5 +78,4 @@ public class PostController {
 
         return "redirect:/board";
     }
-
 }
