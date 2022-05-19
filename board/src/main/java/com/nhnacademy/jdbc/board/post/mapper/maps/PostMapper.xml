@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.nhnacademy.jdbc.board.post.mapper.PostMapper">
-    <select id="selectPostByPostNum" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
+    <select id="sele
+    ctPostByPostNum" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
         select *
         from post
         where post_num = #{postNum}
@@ -12,7 +13,7 @@
 
     <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
         select *
-        from post
+        from post order by created_date DESC
     </select>
 
     <insert id="insertPost">

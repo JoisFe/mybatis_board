@@ -5,7 +5,9 @@ import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DafaultPostService implements PostService {
     private final PostMapper postMapper;
 
@@ -15,11 +17,26 @@ public class DafaultPostService implements PostService {
 
     @Override
     public Optional<Post> getPostByPostNum(Long postNum) {
-        return Optional.empty();
+        return postMapper.selectPostByPostNum(postNum);
     }
 
     @Override
-    public List<Post> getPosts() {
-        return null;
+    public List<Post> getPosts(Integer deleteCheck) {
+        return postMapper.selectPosts(deleteCheck);
+    }
+
+    @Override
+    public void insertPost(Post post) {
+
+    }
+
+    @Override
+    public void modifyPost(Long postNum, String postTitle, String postContent) {
+
+    }
+
+    @Override
+    public void deletePost(Long postNum) {
+
     }
 }
