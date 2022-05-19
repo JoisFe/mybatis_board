@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostMapper {
-    Optional<Post> selectPostByPostNum(Long postNum); 1
+    Optional<Post> selectPostByPostNum(Long postNum);
     List<Post> selectPosts(Integer deleteCheck);
     void insertPost(Post post);
     void updatePostByPostNum(Long postNum, String postTitle, String postContent);
