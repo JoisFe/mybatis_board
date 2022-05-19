@@ -4,9 +4,9 @@
     <title>수업 정보 수정</title>
 </head>
 <body>
-<form method="post" th:action="@{'/post/modify' + ${postNum}}">
-    제목: <input type="text" name="postTitle" value="${post.getPostTitle}" min="1" required/><br />
-    내용: <input type="textarea" name="postContent" value="${post.getPostContent}" min="1" required/><br />
+<form method="post" th:action="@{'/post/modify/' + ${postNum}}">
+    제목: <input type="text" name="postTitle" th:value="${post.getPostTitle}" min="1" required/><br />
+    내용: <input type="textarea" name="postContent" th:value="${post.getPostContent}" min="1" required/><br />
     <br />
     <input type="submit" />
 </form>

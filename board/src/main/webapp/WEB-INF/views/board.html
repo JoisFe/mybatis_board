@@ -16,13 +16,13 @@
     <tbody>
         <tr th:each="list : ${posts}">
             <td><span th:text="${list.getPostNum()}"></span></td>
-            <td><span th:text="${list.getPostTitle()}"></span></td>
+            <td><a th:href="@{'/post/detail/' + ${list.getPostNum()}}"><span th:text="${list.getPostTitle}"></span></a><br /></td>
             <td><span th:text="${list.getCreatedDate}"></span></td>
            <td>
-                <a th:href="@{'/course/modify/' + ${list.getPostNum()}}">수정</a><br />
+                <a th:href="@{'/post/modify/' + ${list.getPostNum()}}">수정</a><br />
             </td>
             <td>
-                <a th:href="@{'/course/delete/' + ${list.getPostNum()}}">삭제</a><br />
+                <a th:href="@{'/post/delete/' + ${list.getPostNum()}}">삭제</a><br />
             </td>
         </tr>
     </tbody>

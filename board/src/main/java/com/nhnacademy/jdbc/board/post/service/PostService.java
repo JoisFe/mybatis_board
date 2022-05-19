@@ -8,7 +8,7 @@ public interface PostService {
     Optional<Post> getPostByPostNum(Long postNum);
     List<Post> getPosts(Integer deleteCheck);
     void insertPost(Post post);
-    void modifyPost(Long postNum, String postTitle, String postContent);
+    void modifyPost(String postTitle, String postContent, Long postNum);
     void deletePost(Long postNum);
 }
 // 서비스 안쪽에는 비지니스로직

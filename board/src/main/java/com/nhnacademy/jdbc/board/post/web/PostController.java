@@ -1,10 +1,8 @@
 package com.nhnacademy.jdbc.board.post.web;
 
-import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
-import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
-import com.nhnacademy.jdbc.request.PostRegisterRequest;
+import com.nhnacademy.jdbc.request.PostRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +46,7 @@ public class PostController {
     }
 
     @PostMapping("/post/register")
-    public String postRegister(PostRegisterRequest postRegisterRequest, HttpServletRequest httpServletRequest) {
+    public String postRegister(PostRequest postRegisterRequest, HttpServletRequest httpServletRequest) {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String id = (String) httpSession.getAttribute("id");
 
@@ -70,11 +68,40 @@ public class PostController {
         return "redirect:/board";
     }
 
-    @PostMapping("/post/modify/{postNum}")
+    @GetMapping("/post/detail/{postNum}")
+    public String postDetail(@PathVariable("postNum") Long postNum, HttpServletRequest httpServletRequest, Model model) {
+        Optional<Post> post = postService.getPostByPostNum(postNum);
+        model.addAttribute("post", post.get());
+        //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
+
+        //FIXME: 공통적인 것 (아래) ModelAttribute엿나 그걸로 빼내야 하지 않나...
+        HttpSession httpSession = httpServletRequest.getSession(true);
+        String id = (String) httpSession.getAttribute("id");
+
+        model.addAttribute("memberId", memberService.getMemberByMemberId(id).get().getMemberId());
+
+        return "postDetail";
+    }
+
+    @GetMapping("/post/modify/{postNum}")
     public String postModify(@PathVariable("postNum") Long postNum, Model model) {
         Optional<Post> post = postService.getPostByPostNum(postNum);
         model.addAttribute("post", post.get());
         //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
+
+        return "postModify";
+    }
+
+    @PostMapping("/post/modify/{postNum}")
+    public String postModify(@PathVariable("postNum") Long postNum, PostRequest postRequest) {
+        postService.modifyPost(postRequest.getPostTitle(), postRequest.getPostContent(), postNum);
+
+        return "redirect:/board";
+    }
+
+    @GetMapping("/post/delete/{postNum}")
+    public String postDelete(@PathVariable("postNum") Long postNum) {
+        postService.deletePost(postNum);
 
         return "redirect:/board";
     }
