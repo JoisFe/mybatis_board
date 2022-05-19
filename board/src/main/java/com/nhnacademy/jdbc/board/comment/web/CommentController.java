@@ -33,15 +33,15 @@ public class CommentController {
 //    public String commentList(@PathVariable("postNum") Long postNum, Model model) {
 //        List<Comment> comments = commentService.getComments(postNum);
 //        model.addAttribute("comments", comments);
-//
+
 //        return "postDetail";
 //    }
 
-    @PostMapping("/comment/register")
-    public String commentRegister() {
-         return "commentRegister";
-         //리턴을 리다이렉트 떄리기
-    }
+//    @PostMapping("/comment/register")
+//    public String commentRegister() {
+//         return "commentRegister";
+//         //리턴을 리다이렉트 떄리기
+//    }
 
     @PostMapping("/comment/register/{postNum}")
     public String commentRegister(CommentRequest commentRegisterRequest, HttpServletRequest httpServletRequest, @PathVariable("postNum") Long postNum){
@@ -58,6 +58,6 @@ public class CommentController {
 
         commentService.insertComment(comment);
 
-        return "redirect:/post/detail/${postnum}";
+        return "redirect:/post/detail/" + postNum;
     }
 }

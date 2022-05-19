@@ -13,7 +13,7 @@
 
 <h2>댓글 창</h2>
 
-<form method="post" th:action="@{'/comment/register'}">
+<form method="post" th:action="@{'/comment/register/' + ${post.getPostNum()}}">
     댓글: <input type="textarea" name="commentContent" min="1" required/><br />
     <br />
     <input type="submit" />
@@ -33,6 +33,7 @@
         <td><span th:text="${list.getCommentNum()}"></span></td>
         <td><span th:text="${list.getCommentNum}"></span></a><br /></td>
         <td><span th:text="${list.getCommentContent}"></span></td>
+        <td><span th:text="${list.getCommentDate}"></span></td>
     </tr>
     </tbody>
 </table>

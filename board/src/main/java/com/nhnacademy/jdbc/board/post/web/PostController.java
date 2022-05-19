@@ -1,6 +1,8 @@
 package com.nhnacademy.jdbc.board.post.web;
 
 import com.nhnacademy.jdbc.PageCheckUtil;
+import com.nhnacademy.jdbc.board.comment.domain.Comment;
+import com.nhnacademy.jdbc.board.comment.service.CommentService;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.request.PostRequest;
@@ -23,14 +25,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
     private final PostService postService;
     private final MemberService memberService;
+    private final CommentService commentService;
 
     private static final int DELETE_STATE = 1;
     private static final int NOT_DELETE_STATE = 0;
 
     public PostController(PostService postService,
-                          MemberService memberService) {
+                          MemberService memberService,
+                          CommentService commentService) {
         this.postService = postService;
         this.memberService = memberService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/board")
@@ -80,6 +85,11 @@ public class PostController {
     public String postDetail(@PathVariable("postNum") Long postNum, HttpServletRequest httpServletRequest, Model model) {
         Optional<Post> post = postService.getPostByPostNum(postNum);
         model.addAttribute("post", post.get());
+
+        List<Comment> comments = commentService.getComments(postNum);
+        model.addAttribute("comments", comments);
+
+
         //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
 
         //FIXME: 공통적인 것 (아래) ModelAttribute엿나 그걸로 빼내야 하지 않나...

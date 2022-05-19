@@ -72,5 +72,8 @@
 
 ## TODO
 
-TODO: Primitive type과 Reference type중, 어떤 타입을 인자로 받을 것인지 고민.
+TODO: 
 
+- Primitive type과 Reference type중, 어떤 타입을 인자로 받을 것인지 고민.
+- 관리자 말고 다른 회원이 삭제 안 되도록
+- Unit Test 작성
