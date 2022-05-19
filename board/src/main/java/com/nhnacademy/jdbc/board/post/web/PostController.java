@@ -5,6 +5,7 @@ import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.request.PostRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -28,6 +30,7 @@ public class PostController {
         this.postService = postService;
         this.memberService = memberService;
     }
+
 
     @GetMapping("/board")
     public String postList(Model model) {
@@ -62,6 +65,44 @@ public class PostController {
         );
 
         postService.insertPost(post);
+
+        return "redirect:/board";
+    }
+
+    @GetMapping("/post/detail/{postNum}")
+    public String postDetail(@PathVariable("postNum") Long postNum, HttpServletRequest httpServletRequest, Model model) {
+        Optional<Post> post = postService.getPostByPostNum(postNum);
+        model.addAttribute("post", post.get());
+        //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
+
+        //FIXME: 공통적인 것 (아래) ModelAttribute엿나 그걸로 빼내야 하지 않나...
+        HttpSession httpSession = httpServletRequest.getSession(true);
+        String id = (String) httpSession.getAttribute("id");
+
+        model.addAttribute("memberId", memberService.getMemberByMemberId(id).get().getMemberId());
+
+        return "postDetail";
+    }
+
+    @GetMapping("/post/modify/{postNum}")
+    public String postModify(@PathVariable("postNum") Long postNum, Model model) {
+        Optional<Post> post = postService.getPostByPostNum(postNum);
+        model.addAttribute("post", post.get());
+        //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
+
+        return "postModify";
+    }
+
+    @PostMapping("/post/modify/{postNum}")
+    public String postModify(@PathVariable("postNum") Long postNum, PostRequest postRequest) {
+        postService.modifyPost(postRequest.getPostTitle(), postRequest.getPostContent(), postNum);
+
+        return "redirect:/board";
+    }
+
+    @GetMapping("/post/delete/{postNum}")
+    public String postDelete(@PathVariable("postNum") Long postNum) {
+        postService.deletePost(postNum);
 
         return "redirect:/board";
     }

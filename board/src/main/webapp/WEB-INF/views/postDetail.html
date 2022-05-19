@@ -1,0 +1,12 @@
+<html>
+<head>
+    <title>게시판 상세</title>
+</head>
+<body>
+<h1>게시글 상세 내용</h1>
+<p>번호 : <span th:text="${post.getPostNum()}"></span></p>
+<p>제목 : <span th:text="${post.getPostTitle()}"></span></p>
+<p>작성자 : <span th:text="${memberId}"></span></p>
+<p>내용 : <span th:text="${post.getPostContent()}"></span></p>
+</body>
+</html>

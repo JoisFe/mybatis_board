@@ -34,8 +34,8 @@ public class DafaultPostService implements PostService {
     }
 
     @Override
-    public void modifyPost(Long postNum, String postTitle, String postContent) {
-        postMapper.updatePostByPostNum(postNum, postTitle, postContent);
+    public void modifyPost(String postTitle, String postContent, Long postNum) {
+        postMapper.updatePostByPostNum(postTitle, postContent, postNum);
     }
 
     @Override
