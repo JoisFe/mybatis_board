@@ -24,7 +24,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = {"/", "/login"})
+    @GetMapping(value = {"", "/login"})
     public String login() {
         return "loginForm";
     }
@@ -37,7 +37,7 @@ public class MemberController {
             httpSession.setAttribute("id", loginRequest.getMemberId());
 
             model.addAttribute("id", loginRequest.getMemberId());
-            return "loginSuccess";
+            return "redirect:/board";
         }
 
         return "redirect:/login";

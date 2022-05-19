@@ -27,5 +27,3 @@ q
 Asrc/main/java/com/nhnacademy/jdbc/board/member/domain/Member.java,0/9/09fbf5e3b517e7f716e2e0d3e546300217b40900
 v
 Fsrc/main/java/com/nhnacademy/jdbc/board/index/web/IndexController.java,f/7/f76509737511245ced87d707e319709ed40bd1a9
-k
-;src/main/java/com/nhnacademy/jdbc/request/LoginRequest.java,d/a/da048a2a1246209c738485f68bd3881ac2ecfe66
