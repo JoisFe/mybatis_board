@@ -3,7 +3,7 @@ package com.nhnacademy.jdbc.request;
 import lombok.Value;
 
 @Value
-public class PostRegisterRequest {
+public class PostRequest {
     String postTitle;
     String postContent;
 }

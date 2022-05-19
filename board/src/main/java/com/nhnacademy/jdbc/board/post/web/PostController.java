@@ -1,13 +1,10 @@
 package com.nhnacademy.jdbc.board.post.web;
 
-import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
-import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
-import com.nhnacademy.jdbc.request.PostRegisterRequest;
+import com.nhnacademy.jdbc.request.PostRequest;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -18,7 +15,7 @@ import com.nhnacademy.jdbc.board.post.domain.Post;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-@Controller("/post")
+@Controller
 public class PostController {
     private final PostService postService;
     private final MemberService memberService;
@@ -47,7 +44,7 @@ public class PostController {
     }
 
     @PostMapping("/post/register")
-    public String postRegister(PostRegisterRequest postRegisterRequest, HttpServletRequest httpServletRequest) {
+    public String postRegister(PostRequest postRegisterRequest, HttpServletRequest httpServletRequest) {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String id = (String) httpSession.getAttribute("id");
 
