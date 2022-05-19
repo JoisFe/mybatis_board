@@ -25,6 +25,26 @@ public class Comment {
         this.commentDate = commentDate;
     }
 
+    public Long getCommentNum() {
+        return commentNum;
+    }
+
+    public Long getMemberNum() {
+        return memberNum;
+    }
+
+    public Long getPostNum() {
+        return postNum;
+    }
+
+    public String getCommentContent() {
+        return commentContent;
+    }
+
+    public Date getCommentDate() {
+        return commentDate;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
