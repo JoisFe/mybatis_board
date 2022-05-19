@@ -23,7 +23,7 @@ public class PostController {
         this.postService = postService;
     }
 
-<<<<<<< HEAD
+
     @GetMapping("/course")
     public String courseList(Model model) {
         List<Course> courses = courseCreationService.getCourseList();
@@ -33,9 +33,9 @@ public class PostController {
         model.addAttribute("subjectService", subjectService);
 
         return "courseList";
-=======
+
     @GetMapping("/board")
     public String getPosts(Integer deleteCheck) {
->>>>>>> 460450f4fafe11be2e65bc053e581c4f4a2e23b3
+
     }
 }
