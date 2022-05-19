@@ -21,8 +21,6 @@ m
 .src/main/webapp/WEB-INF/views/index/index.html,3/9/396a2ad7546bac65edf284717c8d897adb29285a
 y
 Isrc/main/java/com/nhnacademy/jdbc/board/student/mapper/StudentMapper.java,0/b/0be5924ec98f3725e20f16b1fc6b91219c7a8b9d
-}
-Msrc/main/java/com/nhnacademy/jdbc/board/student/mapper/maps/StudentMapper.xml,1/f/1fa8c0af7d7a85cf4ce48e74689db2f1992d85ba
 v
 Fsrc/main/java/com/nhnacademy/jdbc/board/member/domain/MemberGrade.java,3/5/3509167db883a84c86ee68c503fff1ac217518f4
 q
