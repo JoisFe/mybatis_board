@@ -14,7 +14,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/board")
-    public String getPosts(Integer deleteCheck) {
-    }
+//    @GetMapping("/board")
+//    public String getPosts(Integer deleteCheck) {
+//    }
 }
