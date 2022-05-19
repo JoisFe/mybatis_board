@@ -1,5 +1,6 @@
 package com.nhnacademy.jdbc.board.post.web;
 
+import com.nhnacademy.jdbc.PageCheckUtil;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.request.PostRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -32,10 +34,16 @@ public class PostController {
     }
 
     @GetMapping("/board")
-    public String postList(Model model) {
-        List<Post> posts = postService.getPosts(NOT_DELETE_STATE);
+    public String postList(@RequestParam(value="page", defaultValue = "1") String page, Model model) {
+        int pageSize = postService.getPageSize(NOT_DELETE_STATE);
+        model.addAttribute("pageSize", pageSize);
+
+        int currentPage = PageCheckUtil.pagecheck(Integer.parseInt(page), pageSize);
+
+        List<Post> posts = postService.getPosts(NOT_DELETE_STATE, currentPage);
 
         model.addAttribute("posts", posts);
+        model.addAttribute("currentPage", currentPage);
 
         return "board";
     }

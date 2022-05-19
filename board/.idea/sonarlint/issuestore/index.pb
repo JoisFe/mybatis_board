@@ -5,16 +5,12 @@ s
 Csrc/main/java/com/nhnacademy/jdbc/board/comment/domain/Comment.java,1/a/1adffecb7a2dc8da4df2cdf2d683257f6b3d6b06
 s
 Csrc/main/java/com/nhnacademy/jdbc/board/student/domain/Student.java,b/8/b8c8e4fea63111cd3ca7dffbe0aa46a36e72d5eb
-y
-Isrc/main/java/com/nhnacademy/jdbc/board/comment/mapper/CommentMapper.java,a/0/a06a634497743edfbdf0045a408861dfb253db7d
 }
 Msrc/main/java/com/nhnacademy/jdbc/board/comment/mapper/maps/CommentMapper.xml,4/f/4f13a45cf1219dce82dff95f8fc8a0a30c9ec0f6
 a
 1src/main/java/com/nhnacademy/jdbc/board/Base.java,7/b/7bf5ad3f9cb5d18230ebab53db53665390945c75
 n
 >src/main/java/com/nhnacademy/jdbc/board/config/RootConfig.java,3/c/3c2120ffe0a0f7a59d64efd97aca3eb07862f21c
-u
-Esrc/main/java/com/nhnacademy/jdbc/board/config/WebAppInitializer.java,2/8/2830adace85817bafa67fb35e753f3a74f1b009d
 ^
 .src/main/webapp/WEB-INF/views/index/index.html,3/9/396a2ad7546bac65edf284717c8d897adb29285a
 v

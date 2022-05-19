@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 목록</title>
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/pagination.css" rel="stylesheet">
 </head>
 <body>
 <table>
@@ -30,5 +32,21 @@
 
 <button type="button" onclick="location.href='/post/register';">게시글 등록
 </button>
+
+<div class="container xlarge">
+<div class="pagination">
+    <ul>
+        <li id="pagingPrev"><a th:href="@{'/board?page=' + ${currentPage - 1}}">prev</a></li>
+        <script>
+            let pageNum = "[[${pageSize}]]";
+            console.log(pageNum);
+            for (let i = 1; i <= pageNum; ++i) {
+                document.write("<li id=paging" + i + "><a href=/board?page=" + i + ">" + i + "</a></li>")
+            }
+        </script>
+        <li id="pagingNext"><a th:href="@{'/board?page=' + ${currentPage + 1}}">Next</a></li>
+    </ul>
+</div>
+</div>
 </body>
 </html>

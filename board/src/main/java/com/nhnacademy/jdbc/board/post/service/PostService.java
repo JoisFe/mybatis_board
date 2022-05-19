@@ -6,8 +6,10 @@ import java.util.Optional;
 
 public interface PostService {
     Optional<Post> getPostByPostNum(Long postNum);
-    List<Post> getPosts(Integer deleteCheck);
+    List<Post> getPosts(Integer deleteCheck, int page);
     void insertPost(Post post);
     void modifyPost(String postTitle, String postContent, Long postNum);
     void deletePost(Long postNum);
+    Long getPostSize(Integer deleteCheck);
+    int getPageSize(Integer deleteCheck);
 }

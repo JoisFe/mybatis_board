@@ -12,7 +12,15 @@
 
     <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
         select *
-        from post order by created_date DESC
+        from post
+        where delete_check = #{deleteCheck}
+        order by created_date DESC
+        limit #{numPerPage} offset #{startRowPerPage}
+    </select>
+    <select id="findTotalPostsCount" resultType="java.lang.Long">
+        select count(*)
+        from post
+        where delete_check = #{deleteCheck}
     </select>
 
     <insert id="insertPost">
