@@ -1,0 +1,15 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>수업 정보 수정</title>
+</head>
+<body>
+<form method="post" th:action="@{'/course/modify/' + ${courseId}}">
+    교수번호: <input type="text" name="modifyTeacherId" min="1" required/><br />
+    과목번호: <input type="text" name="modifySubjectId" min="1" required/><br />
+    <br />
+    <input type="submit" />
+</form>
+
+</body>
+</html>

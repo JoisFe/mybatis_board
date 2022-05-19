@@ -3,7 +3,7 @@ package com.nhnacademy.jdbc.board.post.domain;
 import java.util.Date;
 
 public class Post {
-    private final Long postNum;
+    private Long postNum;
     private final Long memberNum;
     private final String postTitle;
     private final String postContent;
@@ -11,9 +11,8 @@ public class Post {
     private Date modifiedDate;
     private Integer deleteCheck;
 
-    public Post(Long postNum, Long memberNum, String postTitle, String postContent,
+    public Post(Long memberNum, String postTitle, String postContent,
                 Date createdDate, Integer deleteCheck) {
-        this.postNum = postNum;
         this.memberNum = memberNum;
         this.postTitle = postTitle;
         this.postContent = postContent;
