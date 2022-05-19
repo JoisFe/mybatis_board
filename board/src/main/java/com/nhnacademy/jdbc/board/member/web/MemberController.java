@@ -24,7 +24,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping(value = {"", "/login"})
+    @GetMapping(value = {"/", "/login"})
     public String login() {
         return "loginForm";
     }

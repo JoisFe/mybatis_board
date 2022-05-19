@@ -6,11 +6,11 @@ import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DafaultPostService implements PostService {
+    private final static int NUM_PER_PAGE = 20;
     private final PostMapper postMapper;
 
     DafaultPostService (PostMapper postMapper) {
@@ -24,8 +24,9 @@ public class DafaultPostService implements PostService {
     }
 
     @Override
-    public List<Post> getPosts(Integer deleteCheck) {
-        return postMapper.selectPosts(deleteCheck);
+    public List<Post> getPosts(Integer deleteCheck, int page) {
+        int startRowPerPage = (page - 1) * NUM_PER_PAGE;
+        return postMapper.selectPosts(deleteCheck, startRowPerPage, NUM_PER_PAGE);
     }
 
     @Override
@@ -41,5 +42,15 @@ public class DafaultPostService implements PostService {
     @Override
     public void deletePost(Long postNum) {
         postMapper.deletePostByPostNum(postNum);
+    }
+
+    @Override
+    public Long getPostSize(Integer deleteCheck) {
+        return postMapper.findTotalPostsCount(deleteCheck);
+    }
+
+    @Override
+    public int getPageSize(Integer deleteCheck) {
+        return (int) Math.ceil(getPostSize(deleteCheck) / NUM_PER_PAGE) + 1;
     }
 }
