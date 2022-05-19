@@ -15,10 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-@Controller("/post")
+@Controller
 public class PostController {
     private final PostService postService;
     private final MemberService memberService;
@@ -69,4 +70,14 @@ public class PostController {
 
         return "redirect:/board";
     }
+
+    @PostMapping("/post/modify/{postNum}")
+    public String postModify(@PathVariable("postNum") Long postNum, Model model) {
+        Optional<Post> post = postService.getPostByPostNum(postNum);
+        model.addAttribute("post", post.get());
+        //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
+
+        return "redirect:/board";
+    }
+
 }
