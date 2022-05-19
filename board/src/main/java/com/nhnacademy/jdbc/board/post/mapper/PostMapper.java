@@ -3,6 +3,7 @@ package com.nhnacademy.jdbc.board.post.mapper;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 public interface PostMapper {
     Optional<Post> selectPostByPostNum(Long postNum);
