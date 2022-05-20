@@ -59,7 +59,7 @@ public class PostController {
         model.addAttribute("posts", posts);
         model.addAttribute("paging", paging);
 
-        return "board";
+        return "boardView";
     }
 
     @GetMapping("/post/register")
