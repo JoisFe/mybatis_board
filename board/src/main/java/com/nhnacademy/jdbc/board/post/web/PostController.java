@@ -49,8 +49,7 @@ public class PostController {
 
         model.addAttribute("posts", posts);
         model.addAttribute("currentPage", currentPage);
-
-        return "board";
+        return "boardView";
     }
 
     @GetMapping("/post/register")

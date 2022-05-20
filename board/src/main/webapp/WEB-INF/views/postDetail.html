@@ -31,8 +31,8 @@
     <tbody>
     <tr th:each="list : ${comments}">
         <td><span th:text="${list.getCommentNum()}"></span></td>
-        <td><span th:text="${list.getCommentNum}"></span></a><br /></td>
-        <td><span th:text="${list.getCommentContent}"></span></td>
+        <td><span th:text="${list.getMemberNum}"></span></a><br /></td>
+        <td><span th:text="${list.getCommentContent}"></span></td>+
         <td><span th:text="${list.getCommentDate}"></span></td>
     </tr>
     </tbody>
