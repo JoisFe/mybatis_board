@@ -1,6 +1,5 @@
 package com.nhnacademy.jdbc.board.member.request;
 
-import lombok.Data;
 import lombok.Value;
 
 @Value

@@ -110,7 +110,7 @@ class PostControllerTest {
     }
 
     @Test
-    void testPostModify() {
+    void postModifyPostMappingTest() {
     }
 
     @Test

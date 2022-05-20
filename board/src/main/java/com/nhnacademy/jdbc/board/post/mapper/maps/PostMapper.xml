@@ -10,7 +10,7 @@
         where post_num = #{postNum}
     </select>
 
-    <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.respondDao.BoardRespondDao">
+    <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto">
         select *
         from post
             inner join member on post.member_num = member.member_num
