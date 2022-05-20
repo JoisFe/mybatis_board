@@ -23,6 +23,6 @@ public class DefaultMemberService implements MemberService {
     public boolean matches(String memberId, String memberPwd) {
         Optional<Member> member = getMemberByMemberId(memberId);
 
-        return member.map(user -> user.getMemberPwd().equals(memberPwd)).orElse(false);
+        return member.map(x -> x.getMemberPwd().equals(memberPwd)).orElse(false);
     }
 }

@@ -1,15 +1,20 @@
 package com.nhnacademy.jdbc.board.post.service;
 
+import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.respondDao.BoardRespondDao;
 import java.util.List;
 import java.util.Optional;
 
 public interface PostService {
     Optional<Post> getPostByPostNum(Long postNum);
-    List<Post> getPosts(Integer deleteCheck, int page);
+    List<BoardRespondDao> getPosts(Integer deleteCheck, int page);
     void insertPost(Post post);
-    void modifyPost(String postTitle, String postContent, Long postNum);
-    void deletePost(Long postNum);
-    Long getPostSize(Integer deleteCheck);
+    void modifyPost(String postTitle, String postContent, Long postNum, Long memberNum);
+    void deletePost(Integer deleteCheck, Long postNum);
+    int getPostSize(Integer deleteCheck);
     int getPageSize(Integer deleteCheck);
+    void matchCheckSessionIdAndWriterId(Long postNum, String sessionId);
+    Optional<Member> findWriterIdPostNum(Long postNum);
+    Long getCommentSize(Long postNum);
 }

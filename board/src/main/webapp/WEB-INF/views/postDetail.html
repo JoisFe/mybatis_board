@@ -24,14 +24,14 @@
 <table>
     <thread>
         <th>번호</th>
-        <th>회원</th>
+        <th>회원 번호</th>
         <th>내용</th>
         <th>생성 시간</th>
     </thread>
     <tbody>
     <tr th:each="list : ${comments}">
         <td><span th:text="${list.getCommentNum()}"></span></td>
-        <td><span th:text="${list.getCommentNum}"></span></a><br /></td>
+        <td><span th:text="${list.getMemberNum()}"></span></a><br /></td>
         <td><span th:text="${list.getCommentContent}"></span></td>
         <td><span th:text="${list.getCommentDate}"></span></td>
     </tr>

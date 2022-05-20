@@ -11,8 +11,8 @@
     </select>
 
     <insert id="insertComment">
-        insert into comment(member_num, post_num, comment_content, comment_date)
-        values (#{memberNum}, #{postNum}, #{commentContent}, #{commentDate})
+        insert into comment(post_num, member_num, comment_content, comment_date)
+        values (#{postNum}, #{memberNum}, #{commentContent}, #{commentDate})
     </insert>
 
     <update id="updateCommentContentByCommentNum">
