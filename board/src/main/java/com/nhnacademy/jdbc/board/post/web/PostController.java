@@ -1,23 +1,27 @@
 package com.nhnacademy.jdbc.board.post.web;
 
-import com.nhnacademy.jdbc.board.post.page.Page;
 import com.nhnacademy.jdbc.board.comment.domain.Comment;
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
+import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
+import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
+import com.nhnacademy.jdbc.board.exception.ValidationFailedException;
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
-import com.nhnacademy.jdbc.board.post.requestDao.PostRequestDao;
-import com.nhnacademy.jdbc.board.post.respondDao.BoardRespondDao;
+import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.page.Page;
+import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
+import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import com.nhnacademy.jdbc.board.post.domain.Post;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,29 +54,48 @@ public class PostController {
     }
 
     @GetMapping("/board")
-    public String postList(@RequestParam(value="page", defaultValue = "1") String page, Model model) {
+    public String postList(@ModelAttribute("sessionId") String sessionId,
+                           @RequestParam(value = "page", defaultValue = "1") String page,
+                           Model model) {
 
         Page paging = new Page(postService.getPageSize(NOT_DELETE_STATE), Integer.parseInt(page));
 
-        List<BoardRespondDao> posts = postService.getPosts(NOT_DELETE_STATE, paging.getCurrentPage());
+        List<BoardRespondDto> posts =
+            postService.getPosts(NOT_DELETE_STATE, paging.getCurrentPage());
+
+        if (sessionId != null) {
+            model.addAttribute("sessionId", sessionId);
+            model.addAttribute("sessionGrade",
+                memberService.getMemberByMemberId(sessionId)
+                    .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+                    .getMemberGrade());
+        }
 
         model.addAttribute("posts", posts);
         model.addAttribute("paging", paging);
 
-        return "board";
+        return "boardView";
     }
 
     @GetMapping("/post/register")
-    public String postRegister() {
+    public String postRegister(@ModelAttribute("sessionId") String sessionId) {
+        if (sessionId == null) {
+            throw new MemberNotFoundException("로그인을 하지 않았습니다.");
+        }
         return "postRegister";
     }
 
     @PostMapping("/post/register")
-    public String postRegister(@ModelAttribute("sessionId") String sessionId, PostRequestDao postRegisterRequest) {
-        Long memberNum = memberService.getMemberByMemberId(sessionId).get().getMemberNum();
-        /*
-        FIXME : 이거도 아이디로 멤버찾는데 없는 에러 잡아야하는거 아님 ??
-         */
+    public String postRegister(@ModelAttribute("sessionId") String sessionId,
+                               @Valid @ModelAttribute PostRequestDto postRegisterRequest,
+                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
+        Long memberNum = memberService.getMemberByMemberId(sessionId)
+            .orElseThrow(() -> new MemberNotFoundException("로그인을 하지 않았습니다."))
+            .getMemberNum();
 
         Post post = new Post(
             memberNum,
@@ -90,44 +113,60 @@ public class PostController {
     }
 
     @GetMapping("/post/detail/{postNum}")
-    public String postDetail(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum, Model model) {
+    public String postDetail(@ModelAttribute("sessionId") String sessionId,
+                             @PathVariable("postNum") Long postNum, Model model) {
         Optional<Post> post = postService.getPostByPostNum(postNum);
-        model.addAttribute("post", post.get());
+        model.addAttribute("post", post
+            .orElseThrow(() -> new PostNotFoundException("해당 게시글이 존재하지 않습니다.")));
 
         List<Comment> comments = commentService.getComments(postNum);
         model.addAttribute("comments", comments);
 
-
-        //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
-
-        model.addAttribute("memberId", memberService.getMemberByMemberId(sessionId).get().getMemberId());
+        if (sessionId != null) {
+            model.addAttribute("memberId",
+                    memberService.getMemberByMemberId(sessionId)
+                        .orElseThrow(() -> new MemberNotFoundException("로그인 하지 않았습니다."))
+                        .getMemberId());
+        }
 
         return "postDetail";
     }
 
     @GetMapping("/post/modify/{postNum}")
-    public String postModify(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum, Model model) {
+    public String postModify(@ModelAttribute("sessionId") String sessionId,
+                             @PathVariable("postNum") Long postNum, Model model) {
         postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
 
-        Optional<Post> post = postService.getPostByPostNum(postNum);
-        model.addAttribute("post", post.get());
-        //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
+        model.addAttribute("post", postService.getPostByPostNum(postNum)
+            .orElseThrow(() -> new PostNotFoundException("해당 게시글이 존재하지 않습니다.")));
 
         return "postModify";
     }
 
     @PostMapping("/post/modify/{postNum}")
-    public String postModify(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum, PostRequestDao postRequest) {
+    public String postModify(@ModelAttribute("sessionId") String sessionId,
+                             @PathVariable("postNum") Long postNum,
+                             @Valid PostRequestDto postRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+
         postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
 
-        Member modifyMember = memberService.getMemberByMemberId(sessionId).get();
-        postService.modifyPost(postRequest.getPostTitle(), postRequest.getPostContent(), postNum, modifyMember.getMemberNum());
+        if (sessionId != null) {
+            Member modifyMember =
+                memberService.getMemberByMemberId(sessionId)
+                    .orElseThrow(() -> new MemberNotFoundException("로그인을 하지 않았습니다."));
 
+            postService.modifyPost(postRequest.getPostTitle(), postRequest.getPostContent(),
+                postNum, modifyMember.getMemberNum());
+        }
         return "redirect:/board";
     }
 
     @GetMapping("/post/delete/{postNum}")
-    public String postDelete(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum) {
+    public String postDelete(@ModelAttribute("sessionId") String sessionId,
+                             @PathVariable("postNum") Long postNum) {
         postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
 
         postService.deletePost(DELETE_STATE, postNum);

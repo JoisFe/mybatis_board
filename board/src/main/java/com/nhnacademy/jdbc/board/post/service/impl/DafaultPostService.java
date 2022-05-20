@@ -5,11 +5,11 @@ import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.mapper.MemberMapper;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
-import com.nhnacademy.jdbc.board.post.respondDao.BoardRespondDao;
+import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
-import com.nhnacademy.jdbc.exception.MemberNotFoundException;
-import com.nhnacademy.jdbc.exception.NotMatchMemberIdException;
-import com.nhnacademy.jdbc.exception.PostNotFoundException;
+import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
+import com.nhnacademy.jdbc.board.exception.NotMatchMemberIdException;
+import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -34,16 +34,18 @@ public class DafaultPostService implements PostService {
     }
 
     @Override
-    public List<BoardRespondDao> getPosts(Integer deleteCheck, int page) {
+    public List<BoardRespondDto> getPosts(Integer deleteCheck, int page) {
         int startRowPerPage = (page - 1) * NUM_PER_PAGE;
-        List<BoardRespondDao> boardResponds =
+        List<BoardRespondDto> boardResponds =
             postMapper.selectPosts(deleteCheck, startRowPerPage, NUM_PER_PAGE);
 
-        for (BoardRespondDao boardRespond : boardResponds) {
+        for (BoardRespondDto boardRespond : boardResponds) {
             Long modifyMemberNum = boardRespond.getModifyMemberNum();
             String modifyMemberId = null;
             if (modifyMemberNum != null) {
-                modifyMemberId = memberMapper.selectMemberByMemberNum(modifyMemberNum).get().getMemberId();
+                modifyMemberId = memberMapper.selectMemberByMemberNum(modifyMemberNum)
+                    .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+                    .getMemberId();
             }
 
             boardRespond.setModifyMemberId(modifyMemberId);
@@ -81,14 +83,15 @@ public class DafaultPostService implements PostService {
 
     @Override
     public void matchCheckSessionIdAndWriterId(Long postNum, String sessionId) {
-        if (memberMapper.selectMemberByMemberId(sessionId).get().getMemberGrade().equals(MemberGrade.ADMIN)) {
+        if (memberMapper.selectMemberByMemberId(sessionId)
+            .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+            .getMemberGrade().equals(MemberGrade.ADMIN)) {
             return;
         }
 
-        Optional<Member> writerMember = Optional.ofNullable(findWriterIdPostNum(postNum)
-            .orElseThrow(() -> new MemberNotFoundException("해당 번호의 회원이 존재하지 않습니다.")));
-
-        if (!writerMember.get().getMemberId().equals(sessionId)) {
+        if (!findWriterIdPostNum(postNum)
+            .orElseThrow(() -> new MemberNotFoundException("해당 번호의 회원이 존재하지 않습니다."))
+            .getMemberId().equals(sessionId)) {
             throw new NotMatchMemberIdException("로그인한 아이디와 작성자 아이디가 다릅니다.");
         }
     }
