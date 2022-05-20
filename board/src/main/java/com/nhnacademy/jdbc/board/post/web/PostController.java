@@ -1,11 +1,13 @@
 package com.nhnacademy.jdbc.board.post.web;
 
-import com.nhnacademy.jdbc.PageCheckUtil;
+import com.nhnacademy.jdbc.board.post.page.Page;
 import com.nhnacademy.jdbc.board.comment.domain.Comment;
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
+import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
+import com.nhnacademy.jdbc.board.post.requestDao.PostRequestDao;
+import com.nhnacademy.jdbc.board.post.respondDao.BoardRespondDao;
 import com.nhnacademy.jdbc.board.post.service.PostService;
-import com.nhnacademy.jdbc.request.PostRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,18 +41,25 @@ public class PostController {
         this.commentService = commentService;
     }
 
+    @ModelAttribute("sessionId")
+    public String sessionId(HttpServletRequest httpServletRequest) {
+        HttpSession httpSession = httpServletRequest.getSession(true);
+
+        return (String) httpSession.getAttribute("id");
+
+    }
+
     @GetMapping("/board")
     public String postList(@RequestParam(value="page", defaultValue = "1") String page, Model model) {
-        int pageSize = postService.getPageSize(NOT_DELETE_STATE);
-        model.addAttribute("pageSize", pageSize);
 
-        int currentPage = PageCheckUtil.pagecheck(Integer.parseInt(page), pageSize);
+        Page paging = new Page(postService.getPageSize(NOT_DELETE_STATE), Integer.parseInt(page));
 
-        List<Post> posts = postService.getPosts(NOT_DELETE_STATE, currentPage);
+        List<BoardRespondDao> posts = postService.getPosts(NOT_DELETE_STATE, paging.getCurrentPage());
 
         model.addAttribute("posts", posts);
-        model.addAttribute("currentPage", currentPage);
-        return "boardView";
+        model.addAttribute("paging", paging);
+
+        return "board";
     }
 
     @GetMapping("/post/register")
@@ -58,11 +68,8 @@ public class PostController {
     }
 
     @PostMapping("/post/register")
-    public String postRegister(PostRequest postRegisterRequest, HttpServletRequest httpServletRequest) {
-        HttpSession httpSession = httpServletRequest.getSession(true);
-        String id = (String) httpSession.getAttribute("id");
-
-        Long memberNum = memberService.getMemberByMemberId(id).get().getMemberNum();
+    public String postRegister(@ModelAttribute("sessionId") String sessionId, PostRequestDao postRegisterRequest) {
+        Long memberNum = memberService.getMemberByMemberId(sessionId).get().getMemberNum();
         /*
         FIXME : 이거도 아이디로 멤버찾는데 없는 에러 잡아야하는거 아님 ??
          */
@@ -72,7 +79,9 @@ public class PostController {
             postRegisterRequest.getPostTitle(),
             postRegisterRequest.getPostContent(),
             new Date(),
-            NOT_DELETE_STATE
+            null,
+            NOT_DELETE_STATE,
+            null
         );
 
         postService.insertPost(post);
@@ -81,7 +90,7 @@ public class PostController {
     }
 
     @GetMapping("/post/detail/{postNum}")
-    public String postDetail(@PathVariable("postNum") Long postNum, HttpServletRequest httpServletRequest, Model model) {
+    public String postDetail(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum, Model model) {
         Optional<Post> post = postService.getPostByPostNum(postNum);
         model.addAttribute("post", post.get());
 
@@ -91,17 +100,15 @@ public class PostController {
 
         //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
 
-        //FIXME: 공통적인 것 (아래) ModelAttribute엿나 그걸로 빼내야 하지 않나...
-        HttpSession httpSession = httpServletRequest.getSession(true);
-        String id = (String) httpSession.getAttribute("id");
-
-        model.addAttribute("memberId", memberService.getMemberByMemberId(id).get().getMemberId());
+        model.addAttribute("memberId", memberService.getMemberByMemberId(sessionId).get().getMemberId());
 
         return "postDetail";
     }
 
     @GetMapping("/post/modify/{postNum}")
-    public String postModify(@PathVariable("postNum") Long postNum, Model model) {
+    public String postModify(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum, Model model) {
+        postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
+
         Optional<Post> post = postService.getPostByPostNum(postNum);
         model.addAttribute("post", post.get());
         //FIXME: Null처리 생각하기, Session id값과 등록한 녀석의 id가 같은지 고민하기
@@ -110,15 +117,20 @@ public class PostController {
     }
 
     @PostMapping("/post/modify/{postNum}")
-    public String postModify(@PathVariable("postNum") Long postNum, PostRequest postRequest) {
-        postService.modifyPost(postRequest.getPostTitle(), postRequest.getPostContent(), postNum);
+    public String postModify(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum, PostRequestDao postRequest) {
+        postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
+
+        Member modifyMember = memberService.getMemberByMemberId(sessionId).get();
+        postService.modifyPost(postRequest.getPostTitle(), postRequest.getPostContent(), postNum, modifyMember.getMemberNum());
 
         return "redirect:/board";
     }
 
     @GetMapping("/post/delete/{postNum}")
-    public String postDelete(@PathVariable("postNum") Long postNum) {
-        postService.deletePost(postNum);
+    public String postDelete(@ModelAttribute("sessionId") String sessionId, @PathVariable("postNum") Long postNum) {
+        postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
+
+        postService.deletePost(DELETE_STATE, postNum);
 
         return "redirect:/board";
     }

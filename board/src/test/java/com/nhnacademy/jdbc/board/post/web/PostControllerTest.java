@@ -37,8 +37,6 @@ class PostControllerTest {
     @BeforeEach
     void setUp() {
 
-
-
         postService = mock(PostService.class);
         memberService = mock(MemberService.class);
         commentService = mock(CommentService.class);

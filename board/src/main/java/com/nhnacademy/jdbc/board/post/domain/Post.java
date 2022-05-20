@@ -10,18 +10,11 @@ public class Post {
     private final Date createdDate;
     private Date modifiedDate;
     private Integer deleteCheck;
-
-    public Post(Long memberNum, String postTitle, String postContent,
-                Date createdDate, Integer deleteCheck) {
-        this.memberNum = memberNum;
-        this.postTitle = postTitle;
-        this.postContent = postContent;
-        this.createdDate = createdDate;
-        this.deleteCheck = deleteCheck;
-    }
+    private Long modifyMemberNum;
 
     public Post(Long postNum, Long memberNum, String postTitle, String postContent,
-                Date createdDate, Date modifiedDate, Integer deleteCheck) {
+                Date createdDate, Date modifiedDate, Integer deleteCheck,
+                Long modifyMemberNum) {
         this.postNum = postNum;
         this.memberNum = memberNum;
         this.postTitle = postTitle;
@@ -29,6 +22,18 @@ public class Post {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.deleteCheck = deleteCheck;
+        this.modifyMemberNum = modifyMemberNum;
+    }
+
+    public Post(Long memberNum, String postTitle, String postContent, Date createdDate,
+                Date modifiedDate, Integer deleteCheck, Long modifyMemberNum) {
+        this.memberNum = memberNum;
+        this.postTitle = postTitle;
+        this.postContent = postContent;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.deleteCheck = deleteCheck;
+        this.modifyMemberNum = modifyMemberNum;
     }
 
     public Long getPostNum() {
@@ -59,6 +64,10 @@ public class Post {
         return deleteCheck;
     }
 
+    public Long getModifyMemberNum() {
+        return modifyMemberNum;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -69,6 +78,7 @@ public class Post {
             ", createdDate=" + createdDate +
             ", modifiedDate=" + modifiedDate +
             ", deleteCheck=" + deleteCheck +
+            ", modifyMemberNum=" + modifyMemberNum +
             '}';
     }
 }

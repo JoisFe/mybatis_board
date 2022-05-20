@@ -10,17 +10,29 @@
         where post_num = #{postNum}
     </select>
 
-    <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.domain.Post">
+    <select id="selectPosts" resultType="com.nhnacademy.jdbc.board.post.respondDao.BoardRespondDao">
         select *
         from post
+            inner join member on post.member_num = member.member_num
         where delete_check = #{deleteCheck}
         order by created_date DESC
         limit #{numPerPage} offset #{startRowPerPage}
     </select>
-    <select id="findTotalPostsCount" resultType="java.lang.Long">
+    <select id="findTotalPostsCount" resultType="java.lang.Integer">
         select count(*)
         from post
         where delete_check = #{deleteCheck}
+    </select>
+
+    <select id="selectMemberByPostNum" resultType="com.nhnacademy.jdbc.board.member.domain.Member">
+        select member.member_num, member.member_id, member.member_pwd, member.member_grade from post
+            inner join member on post.member_num = member.member_num
+        where post.post_num = #{postMum}
+    </select>
+    <select id="findCommentCountByPostNum" resultType="java.lang.Long">
+        select count(*)
+        from comment
+        where post_num = #{postNum}
     </select>
 
     <insert id="insertPost">
@@ -29,11 +41,11 @@
     </insert>
 
     <update id="updatePostByPostNum">
-        update post set post_title=#{postTitle}, post_content=#{postContent}
+        update post set post_title=#{postTitle}, post_content=#{postContent}, modify_member_num = #{memberNum}, modified_date = now()
         where post_num = #{postNum}
     </update>
 
-    <delete id="deletePostByPostNum">
-        delete from post where post_num=#{postNum]}
-    </delete>
+    <update id="deletePostByPostNum">
+        update post set delete_check=#{deleteCheck} where post_num=#{postNum}
+    </update>
 </mapper>
