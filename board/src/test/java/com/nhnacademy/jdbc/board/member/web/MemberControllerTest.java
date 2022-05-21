@@ -41,7 +41,7 @@ class MemberControllerTest {
     void loginTest() throws Exception {
         System.out.println("ssesion : " + session.getAttribute("id"));
         System.out.println("member : " + member.getMemberId());
-        when(memberService.matches(any(), any()))
+        when(memberService.matches(any()))
             .thenReturn(true);
 
 //        LoginRequest loginRequest = new LoginRequest("admin", "adminadmin");
@@ -60,7 +60,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("로그인 실패 테스트")
     void loginFailTest() throws Exception {
-        when(memberService.matches(any(), any()))
+        when(memberService.matches(any()))
             .thenReturn(false);
 
         MvcResult mvcResult = mockMvc.perform(post("/login")
