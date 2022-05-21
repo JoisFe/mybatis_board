@@ -32,7 +32,7 @@ public class MemberController {
             throw new ValidationFailedException(bindingResult);
         }
 
-        if (memberService.matches(loginRequest.getMemberId(), loginRequest.getMemberPwd())) {
+        if (memberService.matches(loginRequest)) {
             HttpSession httpSession = httpServletRequest.getSession(true);
             httpSession.setAttribute("id", loginRequest.getMemberId());
             System.out.println("아이디입니다." + httpSession.getAttribute("id"));

@@ -2,6 +2,7 @@ package com.nhnacademy.jdbc.board.post.service;
 
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
 import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
 public interface PostService {
     Optional<Post> getPostByPostNum(Long postNum);
     List<BoardRespondDto> getPosts(Integer deleteCheck, int page);
-    void insertPost(Post post);
+    void insertPost(PostRequestDto postRequestDto, Long memberNum);
     void modifyPost(String postTitle, String postContent, Long postNum, Long memberNum);
     void deletePost(Integer deleteCheck, Long postNum);
     int getPostSize(Integer deleteCheck);

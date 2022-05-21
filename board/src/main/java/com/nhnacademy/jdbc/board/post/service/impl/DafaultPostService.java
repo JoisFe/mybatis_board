@@ -5,17 +5,22 @@ import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.mapper.MemberMapper;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
+import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
 import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
 import com.nhnacademy.jdbc.board.exception.NotMatchMemberIdException;
 import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DafaultPostService implements PostService {
+    private static final int DELETE_STATE = 1;
+    private static final int NOT_DELETE_STATE = 0;
+
     private static final int NUM_PER_PAGE = 20;
 
     private final PostMapper postMapper;
@@ -57,7 +62,18 @@ public class DafaultPostService implements PostService {
     }
 
     @Override
-    public void insertPost(Post post) {
+    public void insertPost(PostRequestDto postRegisterRequest, Long memberNum) {
+
+        Post post = new Post(
+            memberNum,
+            postRegisterRequest.getPostTitle(),
+            postRegisterRequest.getPostContent(),
+            new Date(),
+            null,
+            NOT_DELETE_STATE,
+            null
+        );
+
         postMapper.insertPost(post);
     }
 
