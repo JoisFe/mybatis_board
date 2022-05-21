@@ -63,7 +63,6 @@ public class DafaultPostService implements PostService {
 
     @Override
     public void insertPost(PostRequestDto postRegisterRequest, Long memberNum) {
-
         Post post = new Post(
             memberNum,
             postRegisterRequest.getPostTitle(),
