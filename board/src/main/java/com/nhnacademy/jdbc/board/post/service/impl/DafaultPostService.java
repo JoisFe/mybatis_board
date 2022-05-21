@@ -1,5 +1,9 @@
 package com.nhnacademy.jdbc.board.post.service.impl;
 
+import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
+import com.nhnacademy.jdbc.board.exception.NotMatchMemberIdException;
+import com.nhnacademy.jdbc.board.exception.PostFileUploadException;
+import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.mapper.MemberMapper;
@@ -8,13 +12,13 @@ import com.nhnacademy.jdbc.board.post.mapper.PostMapper;
 import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
 import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
-import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
-import com.nhnacademy.jdbc.board.exception.NotMatchMemberIdException;
-import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class DafaultPostService implements PostService {
@@ -62,7 +66,7 @@ public class DafaultPostService implements PostService {
     }
 
     @Override
-    public void insertPost(PostRequestDto postRegisterRequest, Long memberNum) {
+    public void insertPost(PostRequestDto postRegisterRequest, Long memberNum, MultipartFile multipartFile) {
         Post post = new Post(
             memberNum,
             postRegisterRequest.getPostTitle(),
@@ -72,6 +76,31 @@ public class DafaultPostService implements PostService {
             NOT_DELETE_STATE,
             null
         );
+
+        try (
+            // 맥일 경우
+            FileOutputStream fos = new FileOutputStream(
+                "/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/" + multipartFile.getOriginalFilename() + new Date());
+
+            InputStream is = multipartFile.getInputStream();
+
+
+            // 윈도우일 경우
+            /*
+            FileOutputStream fos = new FileOutputStream(
+                "c:/tmp/" + file.getOriginalFilename() + new Date());
+             */
+        ) {
+            int readCount = 0;
+            byte[] buffer = new byte[1024];
+            int i = 0;
+            while ((readCount = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, readCount);
+            }
+        } catch (Exception e) {
+            throw new PostFileUploadException("파일 업로드 중 에러 발생");
+        }
+
 
         postMapper.insertPost(post);
     }

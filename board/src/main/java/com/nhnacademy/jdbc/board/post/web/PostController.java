@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -88,7 +89,8 @@ public class PostController {
     @PostMapping("/post/register")
     public String postRegister(@ModelAttribute("sessionId") String sessionId,
                                @Valid @ModelAttribute PostRequestDto postRegisterRequest,
-                               BindingResult bindingResult) {
+                               BindingResult bindingResult,
+                               @RequestParam("multipartFile") MultipartFile multipartFile) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
@@ -97,7 +99,7 @@ public class PostController {
             .orElseThrow(() -> new MemberNotFoundException("로그인을 하지 않았습니다."))
             .getMemberNum();
 
-        postService.insertPost(postRegisterRequest, memberNum);
+        postService.insertPost(postRegisterRequest, memberNum, multipartFile);
 
         return "redirect:/board";
     }
