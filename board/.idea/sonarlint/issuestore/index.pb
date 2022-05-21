@@ -14,8 +14,6 @@ Isrc/main/java/com/nhnacademy/jdbc/board/comment/mapper/CommentMapper.java,a/0/
 }
 Msrc/main/java/com/nhnacademy/jdbc/board/comment/mapper/maps/CommentMapper.xml,4/f/4f13a45cf1219dce82dff95f8fc8a0a30c9ec0f6
 {
-Ksrc/main/java/com/nhnacademy/jdbc/board/comment/service/CommentService.java,1/f/1f556e8f673b0168205e75832a052aa7881e1e41
-{
 Ksrc/main/java/com/nhnacademy/jdbc/board/member/mapper/maps/MemberMapper.xml,2/c/2c2cda124463d1ba7d2ebd8bbf47fe8789399356
 w
 Gsrc/main/java/com/nhnacademy/jdbc/board/member/mapper/MemberMapper.java,8/f/8fc99989f564f0f2de0e6367bcbf90eb8b621409
@@ -57,5 +55,3 @@ k
 ;src/main/java/com/nhnacademy/jdbc/board/post/page/Page.java,6/a/6ae9f243e4036a057d997aafd0d806744e80fdb0
 t
 Dsrc/main/java/com/nhnacademy/jdbc/board/post/page/PageCheckUtil.java,4/f/4feea76d3bfa181aff7b38f969016bcabadb0cb3
-Å
-Qsrc/main/java/com/nhnacademy/jdbc/board/comment/requestDto/CommentRequestDto.java,2/9/2996dbdb017167fd7f53b846995a03bcb8b64f08

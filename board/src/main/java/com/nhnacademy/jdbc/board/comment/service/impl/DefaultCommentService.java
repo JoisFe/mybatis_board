@@ -2,7 +2,9 @@ package com.nhnacademy.jdbc.board.comment.service.impl;
 
 import com.nhnacademy.jdbc.board.comment.domain.Comment;
 import com.nhnacademy.jdbc.board.comment.mapper.CommentMapper;
+import com.nhnacademy.jdbc.board.comment.requestDto.CommentRequestDto;
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
+import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,14 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Override
-    public void insertComment(Comment comment) {
+    public void insertComment(CommentRequestDto commentRegisterRequest, Long postNum,
+                              Long memberNum) {
+        Comment comment = new Comment(
+            postNum,
+            memberNum,
+            commentRegisterRequest.getCommentContent(),
+            new Date()
+        );
         commentMapper.insertComment(comment);
     }
 

@@ -52,18 +52,12 @@ public class CommentController {
 
         HttpSession httpSession = httpServletRequest.getSession(true);
         String id = (String) httpSession.getAttribute("id");
+
         Long memberNum = memberService.getMemberByMemberId(id)
             .orElseThrow(() -> new MemberNotFoundException("로그인 하지 않았습니다."))
             .getMemberNum();
 
-        Comment comment = new Comment(
-            postNum,
-            memberNum,
-            commentRegisterRequest.getCommentContent(),
-            new Date()
-        );
-
-        commentService.insertComment(comment);
+        commentService.insertComment(commentRegisterRequest, postNum, memberNum);
 
         return "redirect:/post/detail/" + postNum;
     }
