@@ -97,17 +97,7 @@ public class PostController {
             .orElseThrow(() -> new MemberNotFoundException("로그인을 하지 않았습니다."))
             .getMemberNum();
 
-        Post post = new Post(
-            memberNum,
-            postRegisterRequest.getPostTitle(),
-            postRegisterRequest.getPostContent(),
-            new Date(),
-            null,
-            NOT_DELETE_STATE,
-            null
-        );
-
-        postService.insertPost(post);
+        postService.insertPost(postRegisterRequest, memberNum);
 
         return "redirect:/board";
     }

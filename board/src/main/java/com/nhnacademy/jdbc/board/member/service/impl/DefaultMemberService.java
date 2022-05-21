@@ -2,6 +2,7 @@ package com.nhnacademy.jdbc.board.member.service.impl;
 
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.mapper.MemberMapper;
+import com.nhnacademy.jdbc.board.member.requestDto.LoginRequestDto;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,9 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public boolean matches(String memberId, String memberPwd) {
-        Optional<Member> member = getMemberByMemberId(memberId);
+    public boolean matches(LoginRequestDto loginRequestDto) {
+        Optional<Member> member = getMemberByMemberId(loginRequestDto.getMemberId());
 
-        return member.map(x -> x.getMemberPwd().equals(memberPwd)).orElse(false);
+        return member.map(x -> x.getMemberPwd().equals(loginRequestDto.getMemberPwd())).orElse(false);
     }
 }
