@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title>게시판 상세</title>
+</head>
+<body>
+<h1>게시글 상세 내용</h1>
+<p>번호 : <span th:text="${post.getPostNum()}"></span></p>
+<p>제목 : <span th:text="${post.getPostTitle()}"></span></p>
+<p>작성자 : <span th:text="${writerId}"></span></p>
+<p>내용 : <span th:text="${post.getPostContent()}"></span></p>
+<p><a th:if="${post.getFileName()}"
+          th:href="@{'/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/' + ${post.getFileName()}}" download="">
+    <button type="button">파일 다운로드 : <span th:text="${post.getFileName()}"></span></button></a>
+
+<br>
+<p><a href="/board">게시글 목록</a></p>
+<br>
+
+<div id="heart">♥</div>
+
+
+<a th:href="@{'/like/register?memberNum=' + ${member.getMemberNum()} + '&postNum=' + ${post.getPostNum()}}" id="doHeartBtn">좋아요 등록</a>
+<a th:href="@{'/like/delete?memberNum=' + ${member.getMemberNum()} + '&postNum=' + ${post.getPostNum()}}" id="unDoHeartBtn">좋아요 취소</a>
+
+
+<h2>댓글 창</h2>
+
+<form method="post" th:action="@{'/comment/register/' + ${post.getPostNum()}}">
+    댓글: <textarea name="commentContent" min="1" required></textarea><br />
+    <br />
+    <input type="submit" />
+</form>
+
+</button>
+
+<table>
+    <thread>
+        <th>번호</th>
+        <th>회원 번호</th>
+        <th>내용</th>
+        <th>생성 시간</th>
+    </thread>
+    <tbody>
+    <tr th:each="list : ${comments}">
+        <td><span th:text="${list.getCommentNum()}"></span></td>
+        <td><span th:text="${list.getMemberNum}"></span></a><br /></td>
+        <td><span th:text="${list.getCommentContent}"></span></td>
+        <td><span th:text="${list.getCommentDate}"></span></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
+
+<script>
+    let sessionId = "[[${sessionId}]]";
+    let love = "[[${love}]]";
+
+    console.log(sessionId);
+    console.log(love);
+
+    let unDoHeartBtn = document.getElementById("unDoHeartBtn");
+    let heartMark = document.getElementById("heart");
+    let doHeartBtn = document.getElementById("doHeartBtn");
+
+    if (sessionId === "") {
+        unDoHeartBtn.style.display = 'none';
+        heartMark.style.display = 'none';
+        doHeartBtn.style.display = 'none';
+    } else {
+        if (love === "") {
+            unDoHeartBtn.style.display = 'none';
+            heartMark.style.display = 'none';
+        } else {
+            doHeartBtn.style.display = 'none';
+        }
+    }
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+</head>
+<body>
+<form method="post" action="/board/search">
+    내용: <input type="text" name="searchValue" required></input><br />
+    <br />
+    <input type="submit" />
+</form>
+<table>
+    <thread>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>수정자</th>
+        <th>생성 시간</th>
+        <th>수정 시간</th>
+        <th>댓글 개수</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </thread>
+    <tbody>
+
+    <tr th:each="list : ${postsSearch}">
+        <td><span th:text="${list.getPostNum()}"></span></td>
+        <td><a th:href="@{'/post/detail/' + ${list.getPostNum()}}"><span th:text="${list.getPostTitle}"></span></a><br/>
+        </td>
+        <td><span th:text="${list.getMemberId}"></span></td>
+        <td><span th:text="${list.getModifyMemberId}"></span></td>
+        <td><span th:text="${list.getCreatedDate}"></span></td>
+        <td><span th:text="${list.getModifiedDate}"></span></td>
+        <td><span th:text="${list.getCommentCount}"></span></td>
+
+        <td>
+            <a th:href="@{'/post/modify/' + ${list.getPostNum()}}"
+               th:attr="onclick=|return check('${list.getMemberId()}')|">수정</a><br/>
+        </td>
+        <td>
+            <a th:href="@{'/post/delete/' + ${list.getPostNum()}}"
+               th:attr="onclick=|return check('${list.getMemberId()}')|">삭제</a><br/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
+<button type="button" onclick="location.href='/post/register';">게시글 등록
+</button>
+
+<button type='button' id='restorePageBtn' onclick="location.href='/post/deleteRestore';">삭제 항목 복구 페이지</button>
+
+
+
+<script>
+    console.log(${postsSearch})
+    let sessionId = "[[${sessionId}]]";
+    let sessionGrade = "[[${sessionGrade}]]";
+
+    if (sessionGrade === "USER") {
+        let btn = document.getElementById("restorePageBtn");
+        btn.style.display = 'none';
+    }
+
+    function check(writerId) {
+        console.log(writerId);
+        console.log(sessionId);
+        if (sessionGrade !== "ADMIN") {
+            if (sessionId !== writerId) {
+                alert("해당글 작성자가 아니므로 수정, 삭제 할 수 없습니다.");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+
+<div class="pagination">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <a th:href="@{'/board?page=' + ${pagingSearch.getCurrentPage() - 1}}">prev <</a>
+                <script>
+                    let startPage = "[[${pagingSearch.getStartPage()}]]";
+                    let endPage = "[[${pagingSearch.getEndPage()}]]";
+
+                    for (let i = startPage; i <= endPage; ++i) {
+                        document.write("<a href=/board?page=" + i + ">" + i + "</a>")
+                    }
+                </script>
+                <a th:href="@{'/board?page=' + ${pagingSearch.getCurrentPage() + 1}}">> Next</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>게시글 수정</title>
+</head>
+<body>
+<form method="post" th:action="@{'/post/modify/' + ${postNum}}">
+    제목: <input type="text" name="postTitle" th:value="${post.getPostTitle}" required/><br />
+    내용: <textarea name="postContent" th:value="${post.getPostContent}" required></textarea><br />
+    <br />
+    <input type="submit" />
+</form>
+
+</body>
+</html>

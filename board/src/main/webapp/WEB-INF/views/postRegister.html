@@ -1,0 +1,67 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>게시글 등록</title>
+</head>
+<body>
+<form method="post" action="/post/register" enctype="multipart/form-data">
+    제목: <input type="text" name="postTitle" required/><br />
+    게시글: <textarea name="postContent" required></textarea><br />
+    <br />
+    파일 업로드 : <input type="file" name="multipartFile"/><br/>
+
+    <input type="submit" />
+</form>
+</body>
+</html>
+
+<!--
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>수업 정보 수정</title>
+</head>
+<body>
+<form method="post" id = "form" onsubmit="return false;">
+    교수번호: <input type="text" id="newTeacherId" name="newTeacherId"><br>
+    과목번호: <input type="text" id="newSubjectId" name="newSubjectId"><br>
+    <br>
+    <button id="send">전송</button>
+</form>
+
+<script>
+    let teacherAvailableId = '${teacherAvailableId}';
+    let subjectAvailableId = '${subjectAvailableId}';
+    let send = document.getElementById("send");
+
+    send.addEventListener("click", function () {
+        let form = document.getElementById("form");
+        let newTeacherId = document.getElementById("newTeacherId");
+        let newSubjectId = document.getElementById("newSubjectId");
+
+        console.log(teacherAvailableId);
+        console.log(subjectAvailableId)
+        console.log(newTeacherId);
+        console.log(newSubjectId);
+
+        if (teacherAvailableId[newTeacherId] === undefined) {
+            alert("교수님 id 중 입력한 값에 해당하는 id가 존재하지 않습니다.");
+            return false;
+        }
+
+        if (subjectAvailableId[newSubjectId] === undefined) {
+            alert("과목 id 중 입력한 값에 해당하는 id가 존재하지 않습니다.");
+            return false;
+        }
+
+        form.action = "/course/register";
+        form.method = "POST";
+        form.submit();
+    });
+
+
+</script>
+
+</body>
+</html>
+-->

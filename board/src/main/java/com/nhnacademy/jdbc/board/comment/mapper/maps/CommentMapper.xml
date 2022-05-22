@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nhnacademy.jdbc.board.comment.mapper.CommentMapper">
+    <select id="selectCommentsByPostNum" resultType="com.nhnacademy.jdbc.board.comment.domain.Comment">
+        select *
+        from comment
+        where post_num = #{postNum}
+    </select>
+
+    <insert id="insertComment">
+        insert into comment(post_num, member_num, comment_content, comment_date)
+        values (#{postNum}, #{memberNum}, #{commentContent}, #{commentDate})
+    </insert>
+
+    <update id="updateCommentContentByCommentNum">
+        update comment set comment_content=#{commentContent}
+        where comment_num = #{commentNum}
+    </update>
+
+    <delete id="deleteByCommentNum">
+        delete from comment where comment_num=#{comment_num}
+    </delete>
+
+</mapper>
