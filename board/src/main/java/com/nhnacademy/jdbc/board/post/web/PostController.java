@@ -140,7 +140,7 @@ public class PostController {
             LoveRequestDto loveRequestDto = new LoveRequestDto(member.getMemberNum(), postNum);
             Love love = loveService.findLove(loveRequestDto);
 
-            model.addAttribute("love", love);
+           model.addAttribute("love", love);
         }
 
         return "postDetail";

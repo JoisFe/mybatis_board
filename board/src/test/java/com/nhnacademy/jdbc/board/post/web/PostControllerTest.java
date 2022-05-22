@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
+import com.nhnacademy.jdbc.board.like.domain.Love;
+import com.nhnacademy.jdbc.board.like.requestDto.LoveRequestDto;
 import com.nhnacademy.jdbc.board.like.service.LoveService;
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
@@ -107,14 +109,19 @@ class PostControllerTest {
 
 
     @Test
-    @DisplayName("게시글 조회 테스트")
+    @DisplayName("로그인 했을 경우 게시글 조회 테스트")
     void getPostDetailTest() throws Exception {
         when(postService.getPostByPostNum(any())).thenReturn(Optional.ofNullable(post));
         when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(member));
+        when(memberService.getMemberByMemberNum(any())).thenReturn(Optional.ofNullable(member));
 
-        mockMvc.perform(get("/post/detail/{postNum}", 1))
+        mockMvc.perform(get("/post/detail/{postNum}", 1)
+                .session(session))
             .andExpect(status().isOk())
-            .andExpect(view().name("postDetail"));
+            .andExpect(view().name("postDetail"))
+            .andExpect(model().attributeExists("sessionId"))
+            .andExpect(model().attributeExists("member"));
+
     }
 
     @Test
@@ -123,7 +130,6 @@ class PostControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("postTitle", "제발가즈아");
         params.add("postContent", "뿌슝");
-        params.add("multipartFile", "");
 
         when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(member));
 
@@ -131,6 +137,23 @@ class PostControllerTest {
                 .session(session)
                 .params(params))
             .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("로그인을 하지 않았을 경우 게시글 등록 예외처리 테스트")
+    void postRegisterWithoutSessionTest() throws Exception {
+
+        assertThatThrownBy(() -> mockMvc.perform(get("/post/register")))
+            .hasMessageContaining("로그인을 하지 않았습니다.");
+
+    }
+
+    @Test
+    @DisplayName("로그인 했을 경우 게시글 등록시 view를 제대로 리턴하는지 테스트")
+    void postRegisterWithSessiontest() throws Exception {
+        mockMvc.perform(get("/post/register").session(session))
+            .andExpect(status().isOk())
+            .andExpect(view().name("postRegister"));
     }
 
     @Test
@@ -197,19 +220,33 @@ class PostControllerTest {
     }
 
     @Test
+    @DisplayName("게시글 복구버튼 클릭시 메서드 동작, view 리턴 테스트")
+    void postRestoreTest() throws Exception {
+        mockMvc.perform(get("/post/restore/1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/board"));
+
+        verify(postService, atLeastOnce()).restorePostByPostNum(any(),any());
+    }
+
+    @Test
     @DisplayName("게시글 검색시 view를 제대로 리턴하는지 테스트")
     void postSearchTest() throws Exception {
         mockMvc.perform(post("/board/search")
-                .param("searchValue", "거북아"))
+                .param("searchValue", "turtle"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name("redirect:/board/search/거북아"));
+            .andExpect(view().name("redirect:/board/search?searchValue=turtle"));
     }
 
     @Test
     @DisplayName("게시글 검색 결과가 제대로 동작하는지 테스트")
     void postSearchGetTest() throws Exception {
-        mockMvc.perform(get("/board/search/{searchVal}", "turtle"))
+        when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(member));
+
+        mockMvc.perform(get("/board/search/")
+                .param("searchValue", "sd")
+                .session(session))
             .andExpect(status().isOk())
-            .andExpect(view().name("boardView"));
+            .andExpect(view().name("boardViewSearch"));
     }
 }
