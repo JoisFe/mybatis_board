@@ -5,6 +5,13 @@
     <title>게시글 목록</title>
 </head>
 <body>
+<h3>제목 검색</h3>
+<form method="post" action="/board/search">
+    내용: <input type="text" name="searchValue" required></input><br />
+    <br />
+    <input type="submit" />
+</form>
+<br>
 <table>
     <thread>
         <th>번호</th>
@@ -64,19 +71,12 @@
 
 
 <button type="button" id="registerBtn" onclick="location.href='/post/register';">게시글 등록</button>
-
-<h3>제목 검색</h3>
-<form method="post" action="/board/search">
-    내용: <textarea name="searchValue" required></textarea><br />
-    <br />
-    <input type="submit" />
-</form>
-
+<br><br>
 <button type='button' id='restorePageBtn' onclick="location.href='/post/deleteRestore';">삭제 항목 복구 페이지</button>
 <br>
-
+<br>
 <a th:href="@{'/like/list?memberNum=' + ${sessionNum}}" id="likeList">좋아요 글 목록 페이지</a>
-
+<br>
 
 <script>
     let sessionId = "[[${sessionId}]]";

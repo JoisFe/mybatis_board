@@ -5,6 +5,11 @@
     <title>게시글 목록</title>
 </head>
 <body>
+<form method="post" action="/board/search">
+    내용: <input type="text" name="searchValue" required></input><br />
+    <br />
+    <input type="submit" />
+</form>
 <table>
     <thread>
         <th>번호</th>
@@ -40,12 +45,7 @@
     </tr>
     </tbody>
 </table>
-
-<form method="post" action="/board/search">
-    내용: <textarea name="searchValue" required></textarea><br />
-    <br />
-    <input type="submit" />
-</form>
+<br>
 
 <button type="button" onclick="location.href='/post/register';">게시글 등록
 </button>

@@ -5,8 +5,8 @@
 </head>
 <body>
 <form method="post" th:action="@{'/post/modify/' + ${postNum}}">
-    제목: <input type="text" name="postTitle" th:value="${post.getPostTitle}" min="1" required/><br />
-    내용: <textarea name="postContent" th:value="${post.getPostContent}" min="1" required></textarea><br />
+    제목: <input type="text" name="postTitle" th:value="${post.getPostTitle}" required/><br />
+    내용: <textarea name="postContent" th:value="${post.getPostContent}" required></textarea><br />
     <br />
     <input type="submit" />
 </form>

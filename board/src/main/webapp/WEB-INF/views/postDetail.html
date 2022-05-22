@@ -8,8 +8,12 @@
 <p>제목 : <span th:text="${post.getPostTitle()}"></span></p>
 <p>작성자 : <span th:text="${writerId}"></span></p>
 <p>내용 : <span th:text="${post.getPostContent()}"></span></p>
-<p>파일 : <a th:if="${post.getFileName()}" th:href="@{${post.getFileName()}}" download><button type="button">다운로드</button></a>
+<p><a th:if="${post.getFileName()}"
+          th:href="@{'/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/' + ${post.getFileName()}}" download="">
+    <button type="button">파일 다운로드 : <span th:text="${post.getFileName()}"></span></button></a>
 
+<br>
+<p><a href="/board">게시글 목록</a></p>
 <br>
 
 <div id="heart">♥</div>

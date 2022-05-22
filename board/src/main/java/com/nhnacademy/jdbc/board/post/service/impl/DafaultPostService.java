@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class DafaultPostService implements PostService {
@@ -70,13 +69,13 @@ public class DafaultPostService implements PostService {
     public void insertPost(PostRequestDto postRegisterRequest, Long memberNum) {
         String fileName = null;
         if (!postRegisterRequest.getMultipartFile().equals("")) {
-            fileName =
-                "/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/" +
-                    postRegisterRequest.getMultipartFile().getOriginalFilename() + new Date();
+            fileName = new Date() + postRegisterRequest.getMultipartFile().getOriginalFilename();
 
             try (
                 // 맥일 경우
-                FileOutputStream fos = new FileOutputStream(fileName);
+                FileOutputStream fos = new FileOutputStream(
+                    "/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/" +
+                        fileName);
 
                 InputStream is = postRegisterRequest.getMultipartFile().getInputStream();
 
