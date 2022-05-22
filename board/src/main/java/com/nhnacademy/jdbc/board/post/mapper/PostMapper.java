@@ -17,4 +17,6 @@ public interface PostMapper {
     void deletePostByPostNum(@Param("deleteCheck") Integer deleteCheck, @Param("postNum") Long postNum);
     Optional<Member> selectMemberByPostNum(Long postNum);
     Long findCommentCountByPostNum(Long postNum);
+
+    void updateDeletePostRestore(@Param("deleteCheck") Integer deleteCheck, @Param("postNum") Long postNum);
 }

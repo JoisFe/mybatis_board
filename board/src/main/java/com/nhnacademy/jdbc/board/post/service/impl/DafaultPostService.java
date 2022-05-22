@@ -1,6 +1,7 @@
 package com.nhnacademy.jdbc.board.post.service.impl;
 
 import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
+import com.nhnacademy.jdbc.board.exception.NotAuthorizeException;
 import com.nhnacademy.jdbc.board.exception.NotMatchMemberIdException;
 import com.nhnacademy.jdbc.board.exception.PostFileUploadException;
 import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
@@ -148,5 +149,18 @@ public class DafaultPostService implements PostService {
     @Override
     public Long getCommentSize(Long postNum) {
         return postMapper.findCommentCountByPostNum(postNum);
+    }
+
+    @Override
+    public void restorePostByPostNum(Long postNum, String sessionId) {
+        MemberGrade memberGrade = memberMapper.selectMemberByMemberId(sessionId)
+            .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+            .getMemberGrade();
+
+        if (memberGrade.equals(MemberGrade.USER)) {
+            throw new NotAuthorizeException("관리자 권한이 아니므로 접근 불가합니다.");
+        }
+
+        postMapper.updateDeletePostRestore(NOT_DELETE_STATE, postNum);
     }
 }

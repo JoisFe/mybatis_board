@@ -1,0 +1,12 @@
+
+V	java:S125\"<This block of commented-out lines of code should be removed.(š½÷òúÿÿÿÿ
+A
+java:S1481a"&Remove this unused "i" local variable.(ùó›Ìøÿÿÿÿ
+;
+java:S2185~"%Remove this silly call to "Math.ceil"(ÜıÃ
+M
+java:S1068"0Remove this unused "DELETE_STATE" private field.(©›µª8ÿ£¤¹0
+‚
+java:S11929"lDefine a constant instead of duplicating this literal "í•´ë‹¹ íšŒì›ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤." 3 times.( ¦±´
+X
+java:S2184~"BCast one of the operands of this division operation to a "double".(ÜıÃ

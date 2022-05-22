@@ -21,4 +21,5 @@ public interface PostService {
     void matchCheckSessionIdAndWriterId(Long postNum, String sessionId);
     Optional<Member> findWriterIdPostNum(Long postNum);
     Long getCommentSize(Long postNum);
+    void restorePostByPostNum(Long postNum, String sessionId);
 }
