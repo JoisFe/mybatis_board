@@ -35,7 +35,6 @@ public class MemberController {
         if (memberService.matches(loginRequest)) {
             HttpSession httpSession = httpServletRequest.getSession(true);
             httpSession.setAttribute("id", loginRequest.getMemberId());
-            System.out.println("아이디입니다." + httpSession.getAttribute("id"));
             model.addAttribute("id", loginRequest.getMemberId());
             return "redirect:/board";
         }

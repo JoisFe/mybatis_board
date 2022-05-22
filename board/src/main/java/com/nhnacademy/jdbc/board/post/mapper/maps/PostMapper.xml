@@ -48,6 +48,10 @@
         insert into post(member_num, post_title, post_content, created_date)
         values (#{memberNum}, #{postTitle}, #{postContent}, #{createdDate})
     </insert>
+    <insert id="insertPostWithFile">
+        insert into post(member_num, post_title, post_content, created_date, file_name)
+        values (#{memberNum}, #{postTitle}, #{postContent}, #{createdDate}, #{fileName})
+    </insert>
 
     <update id="updatePostByPostNum">
         update post set post_title=#{postTitle}, post_content=#{postContent}, modify_member_num = #{memberNum}, modified_date = now()

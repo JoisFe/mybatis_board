@@ -14,6 +14,7 @@ public class BoardRespondDto {
     Date modifiedDate;
     Integer deleteCheck;
     Long modifyMemberNum;
+    String fileName;
     Long memberNum2;
     String memberId;
     String memberPwd;
@@ -23,7 +24,7 @@ public class BoardRespondDto {
 
     public BoardRespondDto(Long postNum, Long memberNum, String postTitle, String postContent,
                            Date createdDate, Date modifiedDate, Integer deleteCheck,
-                           Long modifyMemberNum, Long memberNum2, String memberId,
+                           Long modifyMemberNum, String fileName, Long memberNum2, String memberId,
                            String memberPwd,
                            MemberGrade memberGrade) {
         this.postNum = postNum;
@@ -34,6 +35,7 @@ public class BoardRespondDto {
         this.modifiedDate = modifiedDate;
         this.deleteCheck = deleteCheck;
         this.modifyMemberNum = modifyMemberNum;
+        this.fileName = fileName;
         this.memberNum2 = memberNum2;
         this.memberId = memberId;
         this.memberPwd = memberPwd;

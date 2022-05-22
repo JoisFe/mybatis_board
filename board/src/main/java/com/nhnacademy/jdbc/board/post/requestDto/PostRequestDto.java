@@ -11,5 +11,5 @@ public class PostRequestDto {
     String postTitle;
     @NotNull @Length(max=75)
     String postContent;
-    //MultipartFile multipartFile;
+    MultipartFile multipartFile;
 }

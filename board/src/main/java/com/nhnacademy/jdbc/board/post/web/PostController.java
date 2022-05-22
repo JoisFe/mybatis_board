@@ -100,8 +100,7 @@ public class PostController {
     @PostMapping("/post/register")
     public String postRegister(@ModelAttribute("sessionId") String sessionId,
                                @Valid @ModelAttribute PostRequestDto postRegisterRequest,
-                               BindingResult bindingResult,
-                               @RequestParam("multipartFile") MultipartFile multipartFile) {
+                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
@@ -110,7 +109,7 @@ public class PostController {
             .orElseThrow(() -> new MemberNotFoundException("로그인을 하지 않았습니다."))
             .getMemberNum();
 
-        postService.insertPost(postRegisterRequest, memberNum, multipartFile);
+        postService.insertPost(postRegisterRequest, memberNum);
 
         return "redirect:/board";
     }

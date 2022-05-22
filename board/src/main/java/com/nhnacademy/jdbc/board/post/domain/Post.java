@@ -11,10 +11,11 @@ public class Post {
     private Date modifiedDate;
     private Integer deleteCheck;
     private Long modifyMemberNum;
+    private String fileName;
 
     public Post(Long postNum, Long memberNum, String postTitle, String postContent,
                 Date createdDate, Date modifiedDate, Integer deleteCheck,
-                Long modifyMemberNum) {
+                Long modifyMemberNum, String fileName) {
         this.postNum = postNum;
         this.memberNum = memberNum;
         this.postTitle = postTitle;
@@ -23,10 +24,11 @@ public class Post {
         this.modifiedDate = modifiedDate;
         this.deleteCheck = deleteCheck;
         this.modifyMemberNum = modifyMemberNum;
+        this.fileName = fileName;
     }
 
     public Post(Long memberNum, String postTitle, String postContent, Date createdDate,
-                Date modifiedDate, Integer deleteCheck, Long modifyMemberNum) {
+                Date modifiedDate, Integer deleteCheck, Long modifyMemberNum, String fileName) {
         this.memberNum = memberNum;
         this.postTitle = postTitle;
         this.postContent = postContent;
@@ -34,6 +36,7 @@ public class Post {
         this.modifiedDate = modifiedDate;
         this.deleteCheck = deleteCheck;
         this.modifyMemberNum = modifyMemberNum;
+        this.fileName = fileName;
     }
 
     public Long getPostNum() {

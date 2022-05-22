@@ -1,8 +1,6 @@
 
 9
 	board.iml,4/d/4dd4a3ea0db188e3f87f303638ad95b4a50229dc
-n
->src/main/java/com/nhnacademy/jdbc/board/config/RootConfig.java,3/c/3c2120ffe0a0f7a59d64efd97aca3eb07862f21c
 q
 Asrc/main/java/com/nhnacademy/jdbc/board/config/MybatisConfig.java,a/2/a213f771d1c2c718c6a2de8c8394b4ee5f14a3c5
 s
@@ -13,14 +11,10 @@ Psrc/main/java/com/nhnacademy/jdbc/board/exception/NotMatchMemberIdException.jav
 Lsrc/main/java/com/nhnacademy/jdbc/board/exception/PostNotFoundException.java,5/7/57d4aa5fecf95ca2e596f0340d6efab1c2361e49
 €
 Psrc/main/java/com/nhnacademy/jdbc/board/exception/ValidationFailedException.java,e/2/e21522d828680e8bc058f57a8220e7374d775273
-m
-=src/main/java/com/nhnacademy/jdbc/board/post/domain/Post.java,b/f/bff145bea146e189901d8fd65309aaa6b9de6a8b
 k
 ;src/main/java/com/nhnacademy/jdbc/board/post/page/Page.java,6/a/6ae9f243e4036a057d997aafd0d806744e80fdb0
 t
 Dsrc/main/java/com/nhnacademy/jdbc/board/post/page/PageCheckUtil.java,4/f/4feea76d3bfa181aff7b38f969016bcabadb0cb3
-~
-Nsrc/main/java/com/nhnacademy/jdbc/board/interceptor/LoginCheckInterceptor.java,0/3/03958d87238e7179e5a8bde93b27ee79f578f0fe
 {
 Ksrc/test/java/com/nhnacademy/jdbc/board/member/mapper/MemberMapperTest.java,1/c/1cb1753adac6806007bce185f86528a2f405d898
 {
@@ -37,8 +31,6 @@ z
 Jsrc/main/java/com/nhnacademy/jdbc/board/comment/web/CommentController.java,1/2/1213e75c0df3f5560c8b9c01c0c20908fc88c2d9
 z
 Jsrc/test/java/com/nhnacademy/jdbc/board/comment/web/CommentController.java,d/8/d898a2d08f822dd127d9497983e8a79e8dbc933c
-7
-pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 [
 +src/main/java/com/nhnacademy/jdbc/Main.java,8/d/8d9fbc9b50b29267af4dbffb037f4beec811a9b4
 ~

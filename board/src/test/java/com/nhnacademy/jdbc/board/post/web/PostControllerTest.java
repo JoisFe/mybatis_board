@@ -61,7 +61,7 @@ class PostControllerTest {
         session.setAttribute("pwd", "adminadmin");
         member = new Member(1L, "admin", "adminadmin", MemberGrade.ADMIN);
 
-        post = new Post(1L, "test", "test", new Date(), null, 0, null);
+        post = new Post(1L, "test", "test", new Date(), null, 0, null, null);
 //        postService.insertPost(post);
     }
 

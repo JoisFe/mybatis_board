@@ -6,13 +6,11 @@ import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
 import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
     Optional<Post> getPostByPostNum(Long postNum);
     List<BoardRespondDto> getPosts(Integer deleteCheck, int page);
-    void insertPost(PostRequestDto postRegisterRequest, Long memberNum,
-                    MultipartFile multipartFile);
+    void insertPost(PostRequestDto postRegisterRequest, Long memberNum);
 
     void modifyPost(String postTitle, String postContent, Long postNum, Long memberNum);
     void deletePost(Integer deleteCheck, Long postNum);

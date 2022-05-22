@@ -12,6 +12,7 @@ public interface PostMapper {
     List<BoardRespondDto> selectPosts(@Param("deleteCheck") Integer deleteCheck, @Param("startRowPerPage") int startRowPerPage, @Param("numPerPage") int numPerPage);
     Integer findTotalPostsCount(Integer deleteCheck);
     void insertPost(Post post);
+    void insertPostWithFile(Post post);
     void updatePostByPostNum(@Param("postTitle") String postTitle, @Param("postContent") String postContent,
                              @Param("postNum") Long postNum, @Param("memberNum") Long memberNum);
     void deletePostByPostNum(@Param("deleteCheck") Integer deleteCheck, @Param("postNum") Long postNum);

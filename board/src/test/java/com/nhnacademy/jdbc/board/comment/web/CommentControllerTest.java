@@ -55,10 +55,9 @@ public class CommentControllerTest {
         session.setAttribute("pwd", "adminadmin");
 
         member = new Member(1L, "admin", "adminadmin", MemberGrade.ADMIN);
-        post = new Post(1L, 1L, "test", "test", new Date(), null, 0, null);
+        post = new Post(1L, 1L, "test", "test", new Date(), null, 0, null, null);
         comment = new Comment(1L, 1L, 1L, "테스트코멘트", now());
-        postService.insertPost(new PostRequestDto(post.getPostTitle(), post.getPostContent()), 1L,
-            null);
+        postService.insertPost(new PostRequestDto(post.getPostTitle(), post.getPostContent(), null), 1L);
     }
 
     @AfterEach

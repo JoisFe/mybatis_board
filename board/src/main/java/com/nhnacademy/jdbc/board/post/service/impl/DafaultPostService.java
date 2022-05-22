@@ -67,7 +67,37 @@ public class DafaultPostService implements PostService {
     }
 
     @Override
-    public void insertPost(PostRequestDto postRegisterRequest, Long memberNum, MultipartFile multipartFile) {
+    public void insertPost(PostRequestDto postRegisterRequest, Long memberNum) {
+        String fileName = null;
+        if (postRegisterRequest.getMultipartFile() != null) {
+            fileName =
+                "/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/" +
+                    postRegisterRequest.getMultipartFile().getOriginalFilename() + new Date();
+
+            try (
+                // 맥일 경우
+                FileOutputStream fos = new FileOutputStream(fileName);
+
+                InputStream is = postRegisterRequest.getMultipartFile().getInputStream();
+
+
+                // 윈도우일 경우
+            /*
+            FileOutputStream fos = new FileOutputStream(
+                "c:/tmp/" + file.getOriginalFilename() + new Date());
+             */
+            ) {
+                int readCount = 0;
+                byte[] buffer = new byte[1024];
+                int i = 0;
+                while ((readCount = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, readCount);
+                }
+            } catch (Exception e) {
+                throw new PostFileUploadException("파일 업로드 중 에러 발생");
+            }
+        }
+
         Post post = new Post(
             memberNum,
             postRegisterRequest.getPostTitle(),
@@ -75,35 +105,15 @@ public class DafaultPostService implements PostService {
             new Date(),
             null,
             NOT_DELETE_STATE,
-            null
+            null,
+            fileName
         );
 
-        try (
-            // 맥일 경우
-            FileOutputStream fos = new FileOutputStream(
-                "/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/" + multipartFile.getOriginalFilename() + new Date());
-
-            InputStream is = multipartFile.getInputStream();
-
-
-            // 윈도우일 경우
-            /*
-            FileOutputStream fos = new FileOutputStream(
-                "c:/tmp/" + file.getOriginalFilename() + new Date());
-             */
-        ) {
-            int readCount = 0;
-            byte[] buffer = new byte[1024];
-            int i = 0;
-            while ((readCount = is.read(buffer)) != -1) {
-                fos.write(buffer, 0, readCount);
-            }
-        } catch (Exception e) {
-            throw new PostFileUploadException("파일 업로드 중 에러 발생");
+        if (fileName == null) {
+            postMapper.insertPost(post);
+        } else {
+            postMapper.insertPostWithFile(post);
         }
-
-
-        postMapper.insertPost(post);
     }
 
     @Override
