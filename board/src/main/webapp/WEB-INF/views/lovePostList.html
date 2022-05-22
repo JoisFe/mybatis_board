@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>좋아요 항목</title>
+</head>
+<body>
+<table>
+    <thread>
+        <th>번호</th>
+        <th>제목</th>
+    </thread>
+    <tbody>
+
+    <tr th:each="list : ${posts}">
+        <td><span th:text="${list.getPostNum()}"></span></td>
+        <td><a th:href="@{'/post/detail/' + ${list.getPostNum()}}"><span th:text="${list.getPostTitle}"></span></a><br/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><a href="/board">게시글 목록</a></p>
+</body>
+</html>

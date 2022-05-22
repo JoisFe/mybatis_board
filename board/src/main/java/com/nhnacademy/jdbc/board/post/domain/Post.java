@@ -3,26 +3,19 @@ package com.nhnacademy.jdbc.board.post.domain;
 import java.util.Date;
 
 public class Post {
-    private final Long postNum;
+    private Long postNum;
     private final Long memberNum;
     private final String postTitle;
     private final String postContent;
     private final Date createdDate;
     private Date modifiedDate;
     private Integer deleteCheck;
+    private Long modifyMemberNum;
+    private String fileName;
 
     public Post(Long postNum, Long memberNum, String postTitle, String postContent,
-                Date createdDate, Integer deleteCheck) {
-        this.postNum = postNum;
-        this.memberNum = memberNum;
-        this.postTitle = postTitle;
-        this.postContent = postContent;
-        this.createdDate = createdDate;
-        this.deleteCheck = deleteCheck;
-    }
-
-    public Post(Long postNum, Long memberNum, String postTitle, String postContent,
-                Date createdDate, Date modifiedDate, Integer deleteCheck) {
+                Date createdDate, Date modifiedDate, Integer deleteCheck,
+                Long modifyMemberNum, String fileName) {
         this.postNum = postNum;
         this.memberNum = memberNum;
         this.postTitle = postTitle;
@@ -30,6 +23,20 @@ public class Post {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.deleteCheck = deleteCheck;
+        this.modifyMemberNum = modifyMemberNum;
+        this.fileName = fileName;
+    }
+
+    public Post(Long memberNum, String postTitle, String postContent, Date createdDate,
+                Date modifiedDate, Integer deleteCheck, Long modifyMemberNum, String fileName) {
+        this.memberNum = memberNum;
+        this.postTitle = postTitle;
+        this.postContent = postContent;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.deleteCheck = deleteCheck;
+        this.modifyMemberNum = modifyMemberNum;
+        this.fileName = fileName;
     }
 
     public Long getPostNum() {
@@ -60,6 +67,14 @@ public class Post {
         return deleteCheck;
     }
 
+    public Long getModifyMemberNum() {
+        return modifyMemberNum;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -70,6 +85,7 @@ public class Post {
             ", createdDate=" + createdDate +
             ", modifiedDate=" + modifiedDate +
             ", deleteCheck=" + deleteCheck +
+            ", modifyMemberNum=" + modifyMemberNum +
             '}';
     }
 }

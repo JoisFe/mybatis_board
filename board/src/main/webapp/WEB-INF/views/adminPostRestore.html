@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>삭제 댓글 목록</title>
+</head>
+<body>
+<table>
+    <thread>
+        <th>번호</th>
+        <th>제목</th>
+        <th>복구</th>
+    </thread>
+    <tbody>
+
+    <tr th:each="list : ${posts}">
+        <td><span th:text="${list.getPostNum()}"></span></td>
+        <td><span th:text="${list.getPostTitle}"></span><br/>
+        </td>
+        <td>
+            <a th:href="@{'/post/restore/' + ${list.getPostNum()}}">복구</a><br/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="pagination">
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <a th:href="@{'/board?page=' + ${paging.getCurrentPage() - 1}}">prev <</a>
+                <script>
+                    let startPage = "[[${paging.getStartPage()}]]";
+                    let endPage = "[[${paging.getEndPage()}]]";
+
+                    for (let i = startPage; i <= endPage; ++i) {
+                        document.write("<a href=/board?page=" + i + ">" + i + "</a>")
+                    }
+                </script>
+                <a th:href="@{'/board?page=' + ${paging.getCurrentPage() + 1}}">> Next</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<p><a href="/board">게시글 목록</a></p>
+
+</body>
+</html>
