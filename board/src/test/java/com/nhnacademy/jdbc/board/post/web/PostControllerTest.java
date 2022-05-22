@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
+import com.nhnacademy.jdbc.board.like.service.LoveService;
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
@@ -41,6 +42,7 @@ class PostControllerTest {
     private PostService postService;
     private MemberService memberService;
     private CommentService commentService;
+    private LoveService loveService;
     private Member member;
     private Post post;
     private MockHttpSession session;
@@ -50,8 +52,9 @@ class PostControllerTest {
         postService = mock(PostService.class);
         memberService = mock(MemberService.class);
         commentService = mock(CommentService.class);
+        loveService = mock(LoveService.class);
         mockMvc = MockMvcBuilders.standaloneSetup(
-            new PostController(postService, memberService, commentService)).build();
+            new PostController(postService, memberService, commentService, loveService)).build();
 
         session = new MockHttpSession();
         session.setAttribute("id", "admin");

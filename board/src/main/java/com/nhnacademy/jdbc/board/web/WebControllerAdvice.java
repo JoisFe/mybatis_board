@@ -1,6 +1,7 @@
 package com.nhnacademy.jdbc.board.web;
 
 import com.nhnacademy.jdbc.board.exception.CommentNotFouncException;
+import com.nhnacademy.jdbc.board.exception.LoveNotFoundException;
 import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
 import com.nhnacademy.jdbc.board.exception.NotAuthorizeException;
 import com.nhnacademy.jdbc.board.exception.NotMatchMemberIdException;
@@ -18,7 +19,7 @@ public class WebControllerAdvice {
     @ExceptionHandler({CommentNotFouncException.class, MemberNotFoundException.class,
         NotMatchMemberIdException.class, PostNotFoundException.class,
         ValidationFailedException.class, PostFileUploadException.class,
-        NotAuthorizeException.class})
+        NotAuthorizeException.class, LoveNotFoundException.class})
     public String handleException(Exception ex, Model model) {
         log.error("", ex);
 

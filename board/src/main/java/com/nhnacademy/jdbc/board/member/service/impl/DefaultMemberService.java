@@ -21,6 +21,11 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
+    public Optional<Member> getMemberByMemberNum(Long memberNum) {
+        return memberMapper.selectMemberByMemberNum(memberNum);
+    }
+
+    @Override
     public boolean matches(LoginRequestDto loginRequestDto) {
         Optional<Member> member = getMemberByMemberId(loginRequestDto.getMemberId());
 

@@ -6,10 +6,17 @@
 <h1>게시글 상세 내용</h1>
 <p>번호 : <span th:text="${post.getPostNum()}"></span></p>
 <p>제목 : <span th:text="${post.getPostTitle()}"></span></p>
-<p>작성자 : <span th:text="${memberId}"></span></p>
+<p>작성자 : <span th:text="${writerId}"></span></p>
 <p>내용 : <span th:text="${post.getPostContent()}"></span></p>
 
 <br>
+
+<div id="heart">♥</div>
+
+
+<a th:href="@{'/like/register?memberNum=' + ${member.getMemberNum()} + '&postNum=' + ${post.getPostNum()}}" id="doHeartBtn">좋아요 등록</a>
+<a th:href="@{'/like/delete?memberNum=' + ${member.getMemberNum()} + '&postNum=' + ${post.getPostNum()}}" id="unDoHeartBtn">좋아요 취소</a>
+
 
 <h2>댓글 창</h2>
 
@@ -38,6 +45,33 @@
     </tbody>
 </table>
 <br>
+
+
+<script>
+    let sessionId = "[[${sessionId}]]";
+    let love = "[[${love}]]";
+
+    console.log(sessionId);
+    console.log(love);
+
+    let unDoHeartBtn = document.getElementById("unDoHeartBtn");
+    let heartMark = document.getElementById("heart");
+    let doHeartBtn = document.getElementById("doHeartBtn");
+
+    if (sessionId === "") {
+        unDoHeartBtn.style.display = 'none';
+        heartMark.style.display = 'none';
+        doHeartBtn.style.display = 'none';
+    } else {
+        if (love === "") {
+            unDoHeartBtn.style.display = 'none';
+            heartMark.style.display = 'none';
+        } else {
+            doHeartBtn.style.display = 'none';
+        }
+    }
+</script>
+
 
 
 </body>
