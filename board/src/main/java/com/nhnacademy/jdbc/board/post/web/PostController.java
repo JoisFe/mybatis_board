@@ -3,9 +3,11 @@ package com.nhnacademy.jdbc.board.post.web;
 import com.nhnacademy.jdbc.board.comment.domain.Comment;
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
 import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
+import com.nhnacademy.jdbc.board.exception.NotAuthorizeException;
 import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
 import com.nhnacademy.jdbc.board.exception.ValidationFailedException;
 import com.nhnacademy.jdbc.board.member.domain.Member;
+import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.page.Page;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -88,7 +91,8 @@ public class PostController {
     @PostMapping("/post/register")
     public String postRegister(@ModelAttribute("sessionId") String sessionId,
                                @Valid @ModelAttribute PostRequestDto postRegisterRequest,
-                               BindingResult bindingResult) {
+                               BindingResult bindingResult,
+                               @RequestParam("multipartFile") MultipartFile multipartFile) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
@@ -97,7 +101,7 @@ public class PostController {
             .orElseThrow(() -> new MemberNotFoundException("로그인을 하지 않았습니다."))
             .getMemberNum();
 
-        postService.insertPost(postRegisterRequest, memberNum);
+        postService.insertPost(postRegisterRequest, memberNum, multipartFile);
 
         return "redirect:/board";
     }
@@ -160,6 +164,37 @@ public class PostController {
         postService.matchCheckSessionIdAndWriterId(postNum, sessionId);
 
         postService.deletePost(DELETE_STATE, postNum);
+
+        return "redirect:/board";
+    }
+
+    @GetMapping("/post/deleteRestore")
+    public String postDeleteRestore(@ModelAttribute("sessionId") String sessionId, @RequestParam(value = "page", defaultValue = "1") String page,
+                                    Model model) {
+        MemberGrade memberGrade = memberService.getMemberByMemberId(sessionId)
+            .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+            .getMemberGrade();
+
+        if (memberGrade.equals(MemberGrade.USER)) {
+            throw new NotAuthorizeException("관리자 권한이 아니므로 접근 불가합니다.");
+        }
+
+        Page paging = new Page(postService.getPageSize(DELETE_STATE), Integer.parseInt(page));
+
+        List<BoardRespondDto> posts =
+            postService.getPosts(DELETE_STATE, paging.getCurrentPage());
+
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("paging", paging);
+
+        return "adminPostRestore";
+    }
+
+    @GetMapping("/post/restore/{postNum}")
+    public String postRestore(@ModelAttribute("sessionId") String sessionId,
+                              @PathVariable("postNum") Long postNum) {
+        postService.restorePostByPostNum(postNum, sessionId);
 
         return "redirect:/board";
     }
