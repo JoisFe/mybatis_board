@@ -19,7 +19,7 @@
     </thread>
     <tbody>
 
-    <tr th:each="list : ${posts}">
+    <tr th:each="list : ${postsSearch}">
         <td><span th:text="${list.getPostNum()}"></span></td>
         <td><a th:href="@{'/post/detail/' + ${list.getPostNum()}}"><span th:text="${list.getPostTitle}"></span></a><br/>
         </td>
@@ -41,34 +41,26 @@
     </tbody>
 </table>
 
-
-<button type="button" id="registerBtn" onclick="location.href='/post/register';">게시글 등록</button>
-
 <form method="post" action="/board/search">
     내용: <input type="text" name="searchValue" required/><br />
     <br />
     <input type="submit" />
 </form>
 
-<button type='button' id='restorePageBtn' onclick="location.href='/post/deleteRestore';">삭제 항목 복구 페이지</button>
-<br>
+<button type="button" onclick="location.href='/post/register';">게시글 등록
+</button>
 
-<a th:href="@{'/like/list?memberNum=' + ${sessionNum}}" id="likeList">좋아요 글 목록 페이지</a>
+<button type='button' id='restorePageBtn' onclick="location.href='/post/deleteRestore';">삭제 항목 복구 페이지</button>
+
 
 
 <script>
+    console.log(${postsSearch})
     let sessionId = "[[${sessionId}]]";
     let sessionGrade = "[[${sessionGrade}]]";
-    let likeList = document.getElementById("likeList");
-    let registerBtn = document.getElementById("registerBtn");
-    let btn = document.getElementById("restorePageBtn");
 
-    if (sessionId === "") {
-        registerBtn.style.display = 'none';
-        likeList.style.display = 'none';
-    }
-
-    if (sessionGrade === "USER" || sessionId === "") {
+    if (sessionGrade === "USER") {
+        let btn = document.getElementById("restorePageBtn");
         btn.style.display = 'none';
     }
 
@@ -90,16 +82,16 @@
         <tbody>
         <tr>
             <td>
-                <a th:href="@{'/board?page=' + ${paging.getCurrentPage() - 1}}">prev <</a>
+                <a th:href="@{'/board?page=' + ${pagingSearch.getCurrentPage() - 1}}">prev <</a>
                 <script>
-                    let startPage = "[[${paging.getStartPage()}]]";
-                    let endPage = "[[${paging.getEndPage()}]]";
+                    let startPage = "[[${pagingSearch.getStartPage()}]]";
+                    let endPage = "[[${pagingSearch.getEndPage()}]]";
 
                     for (let i = startPage; i <= endPage; ++i) {
                         document.write("<a href=/board?page=" + i + ">" + i + "</a>")
                     }
                 </script>
-                <a th:href="@{'/board?page=' + ${paging.getCurrentPage() + 1}}">> Next</a>
+                <a th:href="@{'/board?page=' + ${pagingSearch.getCurrentPage() + 1}}">> Next</a>
             </td>
         </tr>
         </tbody>

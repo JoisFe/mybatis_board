@@ -39,12 +39,8 @@ z
 Jsrc/test/java/com/nhnacademy/jdbc/board/comment/web/CommentController.java,d/8/d898a2d08f822dd127d9497983e8a79e8dbc933c
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
-u
-Esrc/main/java/com/nhnacademy/jdbc/board/config/WebAppInitializer.java,2/8/2830adace85817bafa67fb35e753f3a74f1b009d
 [
 +src/main/java/com/nhnacademy/jdbc/Main.java,8/d/8d9fbc9b50b29267af4dbffb037f4beec811a9b4
-m
-=src/main/java/com/nhnacademy/jdbc/board/config/WebConfig.java,a/1/a1ca2a8072c40e9e253217787111269c053bb793
 ~
 Nsrc/main/java/com/nhnacademy/jdbc/board/exception/PostFileUploadException.java,7/b/7b9399c3f5f264a2c2e165bc5bc978b86ba0f587
 

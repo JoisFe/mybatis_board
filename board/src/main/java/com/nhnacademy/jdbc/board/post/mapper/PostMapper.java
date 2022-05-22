@@ -19,4 +19,8 @@ public interface PostMapper {
     Long findCommentCountByPostNum(Long postNum);
 
     void updateDeletePostRestore(@Param("deleteCheck") Integer deleteCheck, @Param("postNum") Long postNum);
+
+    //검색기능 추가
+    List<BoardRespondDto> selectPostsBySearch(@Param("deleteCheck") Integer deleteCheck, @Param("startRowPerPage") int startRowPerPage, @Param("numPerPage") int numPerPage, @Param("searchValue") String searchValue);
+
 }

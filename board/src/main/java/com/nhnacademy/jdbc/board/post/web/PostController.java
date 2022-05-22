@@ -17,11 +17,14 @@ import com.nhnacademy.jdbc.board.post.page.Page;
 import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
 import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -215,4 +218,37 @@ public class PostController {
 
         return "redirect:/board";
     }
+
+    @PostMapping("/board/search")
+    public String postSearch(@RequestParam("searchValue") String searchValue)
+        throws UnsupportedEncodingException {
+
+        String encodedParam = URLEncoder.encode(searchValue, "UTF-8");
+        return "redirect:/board/search?searchValue=" + encodedParam;
+    }
+
+    @GetMapping("/board/search")
+    public String postSearch(@RequestParam("searchValue") String searchValue, Model model
+        ,@RequestParam(value = "page", defaultValue = "1") String page,
+                             @ModelAttribute("sessionId") String sessionId) {
+
+        Page paging = new Page(postService.getPageSize(NOT_DELETE_STATE), Integer.parseInt(page));
+
+        List<BoardRespondDto> posts =
+            postService.getPostsWithSearch(NOT_DELETE_STATE, paging.getCurrentPage(), searchValue);
+
+        if (sessionId != null) {
+            model.addAttribute("sessionId", sessionId);
+            model.addAttribute("sessionGrade",
+                memberService.getMemberByMemberId(sessionId)
+                    .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+                    .getMemberGrade());
+        }
+
+        model.addAttribute("postsSearch", posts);
+        model.addAttribute("pagingSearch", paging);
+
+        return "boardViewSearch";
+    }
+
 }

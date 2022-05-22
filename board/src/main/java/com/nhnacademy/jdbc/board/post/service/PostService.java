@@ -22,4 +22,7 @@ public interface PostService {
     Optional<Member> findWriterIdPostNum(Long postNum);
     Long getCommentSize(Long postNum);
     void restorePostByPostNum(Long postNum, String sessionId);
+
+    //검색기능 추가
+    List<BoardRespondDto> getPostsWithSearch(Integer deleteCheck, int page, String searchValue);
 }
