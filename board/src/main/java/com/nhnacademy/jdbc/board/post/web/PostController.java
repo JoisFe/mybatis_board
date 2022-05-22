@@ -6,6 +6,9 @@ import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
 import com.nhnacademy.jdbc.board.exception.NotAuthorizeException;
 import com.nhnacademy.jdbc.board.exception.PostNotFoundException;
 import com.nhnacademy.jdbc.board.exception.ValidationFailedException;
+import com.nhnacademy.jdbc.board.like.domain.Love;
+import com.nhnacademy.jdbc.board.like.requestDto.LoveRequestDto;
+import com.nhnacademy.jdbc.board.like.service.LoveService;
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
@@ -14,7 +17,6 @@ import com.nhnacademy.jdbc.board.post.page.Page;
 import com.nhnacademy.jdbc.board.post.requestDto.PostRequestDto;
 import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -36,16 +38,19 @@ public class PostController {
     private final PostService postService;
     private final MemberService memberService;
     private final CommentService commentService;
+    private final LoveService loveService;
 
     private static final int DELETE_STATE = 1;
     private static final int NOT_DELETE_STATE = 0;
 
     public PostController(PostService postService,
                           MemberService memberService,
-                          CommentService commentService) {
+                          CommentService commentService,
+                          LoveService loveService) {
         this.postService = postService;
         this.memberService = memberService;
         this.commentService = commentService;
+        this.loveService = loveService;
     }
 
     @ModelAttribute("sessionId")
@@ -67,11 +72,12 @@ public class PostController {
             postService.getPosts(NOT_DELETE_STATE, paging.getCurrentPage());
 
         if (sessionId != null) {
+            Member member = memberService.getMemberByMemberId(sessionId)
+                .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."));
+
             model.addAttribute("sessionId", sessionId);
-            model.addAttribute("sessionGrade",
-                memberService.getMemberByMemberId(sessionId)
-                    .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
-                    .getMemberGrade());
+            model.addAttribute("sessionGrade", member.getMemberGrade());
+            model.addAttribute("sessionNum", member.getMemberNum());
         }
 
         model.addAttribute("posts", posts);
@@ -110,17 +116,28 @@ public class PostController {
     public String postDetail(@ModelAttribute("sessionId") String sessionId,
                              @PathVariable("postNum") Long postNum, Model model) {
         Optional<Post> post = postService.getPostByPostNum(postNum);
-        model.addAttribute("post", post
-            .orElseThrow(() -> new PostNotFoundException("해당 게시글이 존재하지 않습니다.")));
+        Post newPost = post
+            .orElseThrow(() -> new PostNotFoundException("해당 게시글이 존재하지 않습니다."));
+        model.addAttribute("post", newPost);
+
+        String writerId = memberService.getMemberByMemberNum(newPost.getMemberNum()).orElseThrow().getMemberId();
+        model.addAttribute("writerId", writerId);
 
         List<Comment> comments = commentService.getComments(postNum);
         model.addAttribute("comments", comments);
 
         if (sessionId != null) {
-            model.addAttribute("memberId",
-                    memberService.getMemberByMemberId(sessionId)
-                        .orElseThrow(() -> new MemberNotFoundException("로그인 하지 않았습니다."))
-                        .getMemberId());
+            model.addAttribute("sessionId", sessionId);
+
+            Member member = memberService.getMemberByMemberId(sessionId)
+                .orElseThrow(() -> new MemberNotFoundException("로그인 하지 않았습니다."));
+
+            model.addAttribute("member", member);
+
+            LoveRequestDto loveRequestDto = new LoveRequestDto(member.getMemberNum(), postNum);
+            Love love = loveService.findLove(loveRequestDto);
+
+            model.addAttribute("love", love);
         }
 
         return "postDetail";

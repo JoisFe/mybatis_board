@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public interface MemberService {
     Optional<Member> getMemberByMemberId(String memberId);
+    Optional<Member> getMemberByMemberNum(Long memberNum);
 
     boolean matches(LoginRequestDto loginRequestDto);
 

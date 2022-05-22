@@ -41,18 +41,26 @@
     </tbody>
 </table>
 
-<button type="button" onclick="location.href='/post/register';">게시글 등록
+<button type="button" id="registerBtn" onclick="location.href='/post/register';">게시글 등록
 </button>
-
 <button type='button' id='restorePageBtn' onclick="location.href='/post/deleteRestore';">삭제 항목 복구 페이지</button>
+<br>
 
+<a th:href="@{'/like/list?memberNum=' + ${sessionNum}}" id="likeList">좋아요 글 목록 페이지</a>
 
 <script>
     let sessionId = "[[${sessionId}]]";
     let sessionGrade = "[[${sessionGrade}]]";
+    let likeList = document.getElementById("likeList");
+    let registerBtn = document.getElementById("registerBtn");
+    let btn = document.getElementById("restorePageBtn");
 
-    if (sessionGrade === "USER") {
-        let btn = document.getElementById("restorePageBtn");
+    if (sessionId === "") {
+        registerBtn.style.display = 'none';
+        likeList.style.display = 'none';
+    }
+
+    if (sessionGrade === "USER" || sessionId === "") {
         btn.style.display = 'none';
     }
 
