@@ -25,8 +25,6 @@ Wsrc/main/java/com/nhnacademy/jdbc/board/comment/service/impl/DefaultCommentServ
 Lsrc/test/java/com/nhnacademy/jdbc/board/member/web/MemberControllerTest.java,f/7/f7c6780a7d6d60e5c2fb7888e684f132dbaad8dc
 Å
 Qsrc/main/java/com/nhnacademy/jdbc/board/comment/requestDto/CommentRequestDto.java,2/9/2996dbdb017167fd7f53b846995a03bcb8b64f08
-v
-Fsrc/main/java/com/nhnacademy/jdbc/board/member/domain/MemberGrade.java,3/5/3509167db883a84c86ee68c503fff1ac217518f4
 z
 Jsrc/main/java/com/nhnacademy/jdbc/board/comment/web/CommentController.java,1/2/1213e75c0df3f5560c8b9c01c0c20908fc88c2d9
 z

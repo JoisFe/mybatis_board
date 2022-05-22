@@ -71,6 +71,10 @@ public class Post {
         return modifyMemberNum;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
     @Override
     public String toString() {
         return "Post{" +

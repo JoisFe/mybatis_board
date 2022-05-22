@@ -69,7 +69,7 @@ public class DafaultPostService implements PostService {
     @Override
     public void insertPost(PostRequestDto postRegisterRequest, Long memberNum) {
         String fileName = null;
-        if (postRegisterRequest.getMultipartFile() != null) {
+        if (!postRegisterRequest.getMultipartFile().equals("")) {
             fileName =
                 "/Users/jo/Desktop/hi/mybatis_board/mybatis_board/board/src/main/resources/uploadFile/" +
                     postRegisterRequest.getMultipartFile().getOriginalFilename() + new Date();
@@ -97,6 +97,8 @@ public class DafaultPostService implements PostService {
                 throw new PostFileUploadException("파일 업로드 중 에러 발생");
             }
         }
+
+        System.out.println(fileName);
 
         Post post = new Post(
             memberNum,
