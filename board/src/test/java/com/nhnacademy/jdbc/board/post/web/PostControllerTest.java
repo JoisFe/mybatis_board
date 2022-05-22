@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -18,8 +19,11 @@ import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
 import com.nhnacademy.jdbc.board.post.domain.Post;
+import com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto;
 import com.nhnacademy.jdbc.board.post.service.PostService;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -187,5 +191,22 @@ class PostControllerTest {
 
         assertThatThrownBy(() -> mockMvc.perform(get("/post/deleteRestore")))
             .hasMessageContaining("관리자 권한이 아니므로 접근 불가합니다");
+    }
+
+    @Test
+    @DisplayName("게시글 검색시 view를 제대로 리턴하는지 테스트")
+    void postSearchTest() throws Exception {
+        mockMvc.perform(post("/board/search")
+                .param("searchValue", "거북아"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name("redirect:/board/search/거북아"));
+    }
+
+    @Test
+    @DisplayName("게시글 검색 결과가 제대로 동작하는지 테스트")
+    void postSearchGetTest() throws Exception {
+        mockMvc.perform(get("/board/search/{searchVal}", "turtle"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("boardView"));
     }
 }

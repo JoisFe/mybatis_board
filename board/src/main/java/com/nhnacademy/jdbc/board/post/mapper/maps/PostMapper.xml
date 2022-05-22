@@ -34,6 +34,15 @@
         from comment
         where post_num = #{postNum}
     </select>
+    <select id="selectPostsBySearch" resultType="com.nhnacademy.jdbc.board.post.respondDto.BoardRespondDto">
+        select *
+        from post
+                 inner join member on post.member_num = member.member_num
+        where delete_check = #{deleteCheck}
+        AND post_title LIKE CONCAT ('%', #{searchValue}, '%')
+        order by created_date DESC
+            limit #{numPerPage} offset #{startRowPerPage}
+    </select>
 
     <insert id="insertPost">
         insert into post(member_num, post_title, post_content, created_date)

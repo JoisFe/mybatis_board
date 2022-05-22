@@ -163,4 +163,29 @@ public class DafaultPostService implements PostService {
 
         postMapper.updateDeletePostRestore(NOT_DELETE_STATE, postNum);
     }
+
+    //검색기능 추가
+    @Override
+    public List<BoardRespondDto> getPostsWithSearch(Integer deleteCheck, int page,
+                                                    String searchValue) {
+        int startRowPerPage = (page - 1) * NUM_PER_PAGE;
+        List<BoardRespondDto> boardResponds =
+            postMapper.selectPostsBySearch(deleteCheck, startRowPerPage, NUM_PER_PAGE, searchValue);
+
+        for (BoardRespondDto boardRespond : boardResponds) {
+            Long modifyMemberNum = boardRespond.getModifyMemberNum();
+            String modifyMemberId = null;
+            if (modifyMemberNum != null) {
+                modifyMemberId = memberMapper.selectMemberByMemberNum(modifyMemberNum)
+                    .orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."))
+                    .getMemberId();
+            }
+
+            boardRespond.setModifyMemberId(modifyMemberId);
+            boardRespond.setCommentCount(postMapper.findCommentCountByPostNum(
+                boardRespond.getPostNum()));
+        }
+
+        return boardResponds;
+    }
 }
