@@ -201,9 +201,11 @@ public class PostController {
     }
 
     @PostMapping("/board/search")
-    public String postSearch(@RequestParam("searchValue") String searchValue) {
+    public String postSearch(@RequestParam("searchValue") String searchValue, Model model) {
 
-        return "redirect:/board/search/" + searchValue;
+        model.addAttribute("searchValue", searchValue);
+
+        return "redirect:/board/search?searchValue=" + searchValue;
     }
 
     @GetMapping("/board/search/{searchValue}")
