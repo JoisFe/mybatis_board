@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -26,11 +25,6 @@ public class CommentController {
         this.commentService = commentService;
         this.postService = postService;
         this.memberService = memberService;
-    }
-
-    @GetMapping("/comment/test")
-    public String test() {
-        return "boardView";
     }
 
     @PostMapping("/comment/register/{postNum}")

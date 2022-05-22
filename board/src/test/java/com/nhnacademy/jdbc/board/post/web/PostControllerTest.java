@@ -1,7 +1,6 @@
 package com.nhnacademy.jdbc.board.post.web;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -15,9 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.nhnacademy.jdbc.board.comment.service.CommentService;
-import com.nhnacademy.jdbc.board.config.RootConfig;
-import com.nhnacademy.jdbc.board.config.WebConfig;
-import com.nhnacademy.jdbc.board.exception.MemberNotFoundException;
 import com.nhnacademy.jdbc.board.member.domain.Member;
 import com.nhnacademy.jdbc.board.member.domain.MemberGrade;
 import com.nhnacademy.jdbc.board.member.service.MemberService;
@@ -25,19 +21,12 @@ import com.nhnacademy.jdbc.board.post.domain.Post;
 import com.nhnacademy.jdbc.board.post.service.PostService;
 import java.util.Date;
 import java.util.Optional;
-import org.apache.ibatis.binding.BindingException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -90,7 +79,7 @@ class PostControllerTest {
     @Test
     @DisplayName("세션은 존재하는데 DB에서 회원이 존재하지 않을 경우 예외처리테스트")
     void MemberNotFoundExceptionTest() throws Exception {
-        assertThatThrownBy(() ->mockMvc.perform(get("/board")
+        assertThatThrownBy(() -> mockMvc.perform(get("/board")
             .session(session))).hasMessageContaining("해당 회원이 존재하지 않습니다.");
     }
 
@@ -127,6 +116,7 @@ class PostControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("postTitle", "제발가즈아");
         params.add("postContent", "뿌슝");
+        params.add("multipartFile", "");
 
         when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(member));
 
@@ -153,7 +143,7 @@ class PostControllerTest {
         when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(member));
 
         mockMvc.perform(post("/post/modify/{postNum}", 1)
-            .session(session))
+                .session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name("redirect:/board"));
 
@@ -162,7 +152,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("게시글 삭제 테스트")
-    void postDelete() throws Exception {
+    void postDeleteTest() throws Exception {
         mockMvc.perform(get("/post/delete/1")
                 .session(session))
             .andExpect(status().is3xxRedirection())
@@ -170,5 +160,32 @@ class PostControllerTest {
 
         verify(postService, atLeastOnce()).matchCheckSessionIdAndWriterId(any(), any());
         verify(postService, atLeastOnce()).deletePost(any(), any());
+    }
+
+    @Test
+    @DisplayName("admin일시 복구페이지 조회 테스트")
+    void postRestoreVisitWithAdminTest() throws Exception {
+        when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(member));
+
+        mockMvc.perform(get("/post/deleteRestore")
+            .session(session))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("posts"))
+            .andExpect(model().attributeExists("paging"));
+
+        verify(memberService, atLeastOnce()).getMemberByMemberId(any());
+    }
+
+    @Test
+    @DisplayName("일반 유저일시 복구페이지 클릭시 예외처리 테스트")
+    void postRestoreVisitWithoutAdminTest() {
+        Member user = new Member(2L, "user", "useruser", MemberGrade.USER);
+        session.clearAttributes();
+        session.setAttribute("user", "useruser");
+
+        when(memberService.getMemberByMemberId(any())).thenReturn(Optional.ofNullable(user));
+
+        assertThatThrownBy(() -> mockMvc.perform(get("/post/deleteRestore")))
+            .hasMessageContaining("관리자 권한이 아니므로 접근 불가합니다");
     }
 }
